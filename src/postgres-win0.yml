@@ -76,7 +76,7 @@ postgresql:
   data_dir: data/postgresql0
 #  bin_dir: C:/bigsql/pg11/bin
 #  config_dir:
-  pgpass: tmp/pgpass0
+  pgpass: data/pgpass0
   authentication:
     replication:
       username: replicator
