@@ -1,6 +1,5 @@
 @ECHO off
-SET MD=output
-SET PACKAGE_NAME=patroni-win-x64
+SET MD=patroni-win-x64
 SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.3.13/etcd-v3.3.13-windows-amd64.zip
 SET PATRONI_REF=https://github.com/zalando/patroni/archive/v1.5.6.zip
 
@@ -33,4 +32,3 @@ CALL venv\Scripts\deactivate || EXIT /B 1
 MOVE venv ..\%MD%\venv
 CD ..
 MOVE patroni %MD%\patroni
-MOVE %MD% %PACKAGE_NAME%
