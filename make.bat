@@ -6,29 +6,38 @@ SET PATRONI_REF=https://github.com/zalando/patroni/archive/v1.5.6.zip
 
 ECHO --- Start bootstrapping ---
 
-RMDIR /Q /S %MD% patroni > nul
+RMDIR /Q /S %MD% patroni > nul 2>&1
 MKDIR %MD%
 COPY src\*.* %MD%\
 
-@ECHO on
+@ECHO --- Update Python and PIP installation ---
+@CALL install-env.bat
+MOVE python-install.exe %MD%\
+@ECHO --- Python and PIP installation updated ---
 
 @ECHO --- Download ETCD ---
-powershell -Command "[Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls'; ((new-object net.webclient).DownloadFile('%ETCD_REF%', '%TEMP%\etcd.zip'))"
-powershell -Command "$shell = New-Object -ComObject Shell.Application; 	$zip_src = $shell.NameSpace('%TEMP%\etcd.zip'); $zip_dest = $shell.NameSpace((Resolve-Path '%CD%').Path); $zip_dest.CopyHere($zip_src.Items(), 1044)"
+curl %ETCD_REF% --location --output %TEMP%\etcd.zip
+powershell -Command "Expand-Archive '%TEMP%\etcd.zip' '%CD%'"
 MOVE etcd-* %MD%\etcd
+@ECHO --- ETCD downloaded ---
 
 @ECHO --- Download PATRONI ---
-powershell -Command "[Net.ServicePointManager]::SecurityProtocol = 'tls12, tls11, tls'; ((new-object net.webclient).DownloadFile('%PATRONI_REF%', '%TEMP%\patroni.zip'))"
-powershell -Command "$shell = New-Object -ComObject Shell.Application; 	$zip_src = $shell.NameSpace('%TEMP%\patroni.zip'); $zip_dest = $shell.NameSpace((Resolve-Path '%CD%').Path); $zip_dest.CopyHere($zip_src.Items(), 1044)"
+curl %PATRONI_REF% --location --output %TEMP%\patroni.zip
+powershell -Command "Expand-Archive '%TEMP%\patroni.zip' '%CD%'"
 MOVE patroni-* patroni
+@ECHO --- PATRONI downloaded ---
 
+@ECHO --- Download PATRONI packages ---
 CD patroni
-virtualenv.exe venv
-CALL venv\Scripts\activate || EXIT /B 1
-pip install -r requirements.txt || EXIT /B 1
-pip install psycopg2-binary || EXIT /B 1
-CALL venv\Scripts\deactivate || EXIT /B 1
+pip download -r requirements.txt -d .patroni-packages
+pip download psycopg2-binary -d .patroni-packages
+@ECHO --- PATRONI packages downloaded ---
 
-MOVE venv ..\%MD%\venv
 CD ..
 MOVE patroni %MD%\patroni
+
+@ECHO --- Prepare archive ---
+powershell -Command "Compress-Archive '%MD%' '%MD%.zip'"
+@ECHO --- Archive compressed ---
+
+@ECHO --- PACKAGING FINISHED ---
