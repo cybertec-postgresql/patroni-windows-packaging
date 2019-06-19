@@ -1,12 +1,12 @@
 # patroni-windows-packaging
 Automate installing and launching of Patroni under Windows
 
-#TL;DR
+## TL;DR
 1. Run `install-env.bat` and reopen the console to update `PATH` and `PATHEXT` environment variables
 2. Run `make.bat`
 3. Deploy `patroni-win-x64.zip`
 
-#Dependencies
+## Dependencies
 * curl
 * PowerShell
 
