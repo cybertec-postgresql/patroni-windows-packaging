@@ -1,7 +1,7 @@
 @ECHO off
 SET MD=patroni-win-x64
-SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.3.13/etcd-v3.3.13-windows-amd64.zip
-SET PATRONI_REF=https://github.com/zalando/patroni/archive/v1.5.6.zip
+SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.3.22/etcd-v3.3.22-windows-amd64.zip
+SET PATRONI_REF=https://github.com/zalando/patroni/archive/v1.6.5.zip
 
 
 ECHO --- Start bootstrapping ---
