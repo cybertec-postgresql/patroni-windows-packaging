@@ -3,7 +3,7 @@ Automate installing and launching of Patroni under Windows
 
 ## TL;DR
 1. Run `make.bat`
-2. Deploy `patroni-win-x64.zip`
+2. Deploy `patroni-win-x64.zip` or `Patroni-Env-Setup.exe` installer
 
 ## Dependencies
 * `curl`
