@@ -10,8 +10,8 @@ python-install.exe /quiet InstallAllUsers=0 PrependPath=1 Include_test=0 Include
 @ECHO --- Installing Patroni packages ---
 %PYTHON% -m pip install --upgrade pip
 CD patroni
-%PIP% install --no-index --find-links="file://.patroni-packages" -r requirements.txt
-%PIP% install --no-index --find-links="file://.patroni-packages" psycopg2-binary
+%PIP% install --no-index --find-links .patroni-packages -r requirements.txt
+%PIP% install --no-index --find-links .patroni-packages psycopg2-binary
 @ECHO --- Patroni packages installed ---
 
 @PAUSE
