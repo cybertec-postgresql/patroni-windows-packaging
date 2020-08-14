@@ -2,7 +2,7 @@
 
 SETLOCAL
 
-REM Set here yuour favourite editor
-SET EDITOR=notepad.exe
+REM Set here your console [sic!] favorite editor
+SET EDITOR=micro\micro.exe
 
 python.exe patroni\patronictl.py -c postgres-win0.yml %*

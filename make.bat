@@ -2,6 +2,7 @@
 SET MD=patroni-win-x64
 SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.3.22/etcd-v3.3.22-windows-amd64.zip
 SET PATRONI_REF=https://github.com/zalando/patroni/archive/v1.6.5.zip
+SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.6/micro-2.0.6-win64.zip
 
 @ECHO --- Start bootstrapping ---
 
@@ -20,6 +21,12 @@ curl %ETCD_REF% --location --output %TEMP%\etcd.zip
 powershell -Command "Expand-Archive '%TEMP%\etcd.zip' '%CD%'"
 MOVE etcd-* %MD%\etcd
 @ECHO --- ETCD downloaded ---
+
+@ECHO --- Download MICRO ---
+curl %MICRO_REF% --location --output %TEMP%\micro.zip
+powershell -Command "Expand-Archive '%TEMP%\micro.zip' '%CD%'"
+MOVE micro-* %MD%\micro
+@ECHO --- MICRO downloaded ---
 
 @ECHO --- Download PATRONI ---
 curl %PATRONI_REF% --location --output %TEMP%\patroni.zip
