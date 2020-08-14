@@ -1,0 +1,7 @@
+<service>
+  <id>vip-manager</id>
+  <name>vip-manager</name>
+  <description>Manager for a virtual IP based on state kept in etcd or Consul </description>
+  <executable>%BASE%\vip-manager\vip-manager.exe</executable>
+  <arguments>-config %BASE%\vip-manager.yml</arguments>
+</service>

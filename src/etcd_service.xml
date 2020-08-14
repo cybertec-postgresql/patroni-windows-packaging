@@ -1,0 +1,7 @@
+<service>
+  <id>etcd</id>
+  <name>etcd</name>
+  <description>Distributed reliable key-value store</description>
+  <executable>%BASE%\etcd\ectd.exe</executable>
+  <arguments>--config-file=%BASE%\etcd.conf</arguments>
+</service>
