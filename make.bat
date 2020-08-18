@@ -34,7 +34,7 @@ MKDIR %MD%\service
 curl %WINSW_REF% --location --output %MD%\service\patroni_service.exe
 COPY %MD%\service\patroni_service.exe %MD%\service\etcd_service.exe /B
 COPY %MD%\service\patroni_service.exe %MD%\service\vip_service.exe /B
-MOVE *.xml %MD%\service\
+MOVE %MD%\*.xml %MD%\service\
 @ECHO --- WINSW downloaded ---
 
 @ECHO --- Download PATRONI ---
