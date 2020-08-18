@@ -40,6 +40,7 @@ Source: "..\patroni-win-x64\*.bat"; DestDir: "{app}"
 Source: "..\patroni-win-x64\*.yml"; DestDir: "{app}"
 Source: "..\patroni-win-x64\etcd\*"; DestDir: "{app}\etcd"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "..\patroni-win-x64\micro\*"; DestDir: "{app}\micro"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\patroni-win-x64\service\*"; DestDir: "{app}\service"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "..\patroni-win-x64\patroni\*"; DestDir: "{app}\patroni"; Flags: ignoreversion createallsubdirs recursesubdirs
 
 [Icons]
