@@ -31,9 +31,10 @@ MOVE micro-* %MD%\micro
 
 @ECHO --- Download WINSW ---
 MKDIR %MD%\service
-curl %MICRO_REF% --location --output %MD%\service\patroni_service.exe
+curl %WINSW_REF% --location --output %MD%\service\patroni_service.exe
 COPY %MD%\service\patroni_service.exe %MD%\service\etcd_service.exe /B
 COPY %MD%\service\patroni_service.exe %MD%\service\vip_service.exe /B
+MOVE *.xml %MD%\service\
 @ECHO --- WINSW downloaded ---
 
 @ECHO --- Download PATRONI ---
