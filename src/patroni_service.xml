@@ -8,7 +8,7 @@
   <log mode="roll"></log>
   <logpath>%BASE%\log</logpath>
   <serviceaccount>
-    <user>postgres</username>
+    <user>postgres</user>
     <password>12345</password>
   </serviceaccount>
 </service>
