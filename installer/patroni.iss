@@ -37,17 +37,14 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: "..\patroni-win-x64\python-install.exe"; DestDir: "{app}"
 Source: "..\patroni-win-x64\*.bat"; DestDir: "{app}"
-Source: "..\patroni-win-x64\*.yml"; DestDir: "{app}"
 Source: "..\patroni-win-x64\etcd\*"; DestDir: "{app}\etcd"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "..\patroni-win-x64\micro\*"; DestDir: "{app}\micro"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "..\patroni-win-x64\service\*"; DestDir: "{app}\service"; Flags: ignoreversion createallsubdirs recursesubdirs
 Source: "..\patroni-win-x64\patroni\*"; DestDir: "{app}\patroni"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\patroni-win-x64\vip-manager\*"; DestDir: "{app}\vip-manager"; Flags: ignoreversion createallsubdirs recursesubdirs
+
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
-; Filename: "{app}\python-install.exe"; Parameters: "SimpleInstall=1 InstallAllUsers=0 PrependPath=1 Include_test=0 Include_launcher=0 SimpleInstallDescription=""Patroni Environment Setup"""; Flags: waituntilterminated; Description: "Install Python interpreter"
-; Filename: "{localappdata}\Programs\Python\Python38\Scripts\pip3.exe"; Parameters: "install --no-index --find-links .patroni-packages -r requirements.txt"; WorkingDir: "{app}"; Flags: waituntilterminated runasoriginaluser runmaximized; StatusMsg: "Installing required packages"
-; Filename: "{localappdata}\Programs\Python\Python38\Scripts\pip3.exe"; Parameters: "install --no-index --find-links ""{app}\.patroni-packages"" psycopg2-binary"; WorkingDir: "{app}"; Flags: waituntilterminated runasoriginaluser runmaximized; Description: "Install required packages"; StatusMsg: "Installing psycopg2 package..."
 Filename: "{app}\install.bat"; WorkingDir: "{app}"; Flags: waituntilterminated
