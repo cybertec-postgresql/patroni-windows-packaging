@@ -36,21 +36,12 @@ powershell -Command "Expand-Archive '%TEMP%\vip.zip' '%CD%'"
 MOVE vip-manager* %MD%\vip-manager
 @ECHO --- VIP-MANAGER downloaded ---
 
-@ECHO --- Download WINSW ---
-curl %WINSW_REF% --location --output %MD%\patroni\patroni_service.exe
-COPY src\patroni_service.xml %MD%\etcd\
-COPY %MD%\patroni\patroni_service.exe %MD%\etcd\etcd_service.exe /B
-COPY src\etcd_service.xml %MD%\etcd\
-COPY %MD%\patroni\patroni_service.exe %MD%\vip-manager\vip_service.exe /B
-COPY src\vip_service.xml %MD%\vip-manager\
-@ECHO --- WINSW downloaded ---
-
 @ECHO --- Download PATRONI ---
 curl %PATRONI_REF% --location --output %TEMP%\patroni.zip
 powershell -Command "Expand-Archive '%TEMP%\patroni.zip' '%CD%'"
 MOVE patroni-* %MD%\patroni
 DEL %MD%\patroni\postgres?.yml
-MOVE %MD%\patroni.yml %MD%\patroni\
+COPY src\patroni.yml %MD%\patroni\
 @ECHO --- PATRONI downloaded ---
 
 @ECHO --- Download PATRONI packages ---
@@ -59,6 +50,15 @@ CD %MD%\patroni
 %PIP% download psycopg2-binary -d .patroni-packages
 CD ..\..
 @ECHO --- PATRONI packages downloaded ---
+
+@ECHO --- Download WINSW ---
+curl %WINSW_REF% --location --output %MD%\patroni\patroni_service.exe
+COPY src\patroni_service.xml %MD%\patroni\
+COPY %MD%\patroni\patroni_service.exe %MD%\etcd\etcd_service.exe /B
+COPY src\etcd_service.xml %MD%\etcd\
+COPY %MD%\patroni\patroni_service.exe %MD%\vip-manager\vip_service.exe /B
+COPY src\vip_service.xml %MD%\vip-manager\
+@ECHO --- WINSW downloaded ---
 
 @ECHO --- Prepare archive ---
 powershell -Command "Compress-Archive '%MD%' '%MD%.zip'"
