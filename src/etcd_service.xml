@@ -2,6 +2,7 @@
   <id>etcd</id>
   <name>etcd</name>
   <description>Distributed reliable key-value store</description>
-  <executable>%BASE%\etcd\ectd.exe</executable>
-  <arguments>--config-file=%BASE%\etcd.conf</arguments>
+  <executable>%BASE%\ectd.exe</executable>
+  <arguments>--config-file=%BASE%\ectd.conf</arguments>
+  <logpath>%BASE%\log</logpath>
 </service>

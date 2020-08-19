@@ -2,8 +2,8 @@
   <id>patroni</id>
   <name>Patroni HA Windows Service</name>
   <description>Patroni high-availability solution using Python and etcd</description>
-  <executable>C:\Users\pasha\AppData\Local\Programs\Python\Python38\python.exe</executable>
-  <arguments>%BASE%\patroni\patroni.py %BASE%\postgres-win0.yml</arguments>
+  <executable>python.exe</executable>
+  <arguments>%BASE%\patroni.py %BASE%\postgres.yml</arguments>
   <stopparentprocessfirst>true</stopparentprocessfirst>
   <log mode="roll"></log>
   <logpath>%BASE%\log</logpath>
