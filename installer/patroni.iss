@@ -2,6 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Patroni Environment Setup"
+#define MyAppInstallDir "PES"
 #define MyAppVersion "0.1"
 #define MyAppPublisher "CYBERTEC PostgreSQL International GmbH"
 #define MyAppURL "https://www.cybertec-postgresql.com/"
@@ -17,18 +18,19 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\{#MyAppName}
+DefaultDirName={autopf}\{#MyAppInstallDir}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=..\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
-PrivilegesRequired=lowest
+; PrivilegesRequired=lowest
 OutputDir=..
 OutputBaseFilename=Patroni-Env-Setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesInstallIn64BitMode="x64"
+AppCopyright=CYBERTEC PostgreSQL International GmbH
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
