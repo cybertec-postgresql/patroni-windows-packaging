@@ -10,11 +10,13 @@ jobs:
     name: Upload Release Asset
     runs-on: windows-latest
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           .\make.bat
+      
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -25,8 +27,9 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset 
+      
+      - name: Upload Release Asset (zip)
+        id: upload-release-asset-zip 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,3 +38,14 @@ jobs:
           asset_path: ./patroni-win-x64.zip
           asset_name: patroni-win-x64.zip
           asset_content_type: application/zip
+
+      - name: Upload Release Asset (exe)
+        id: upload-release-asset-exe
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./Patroni-Env-Setup.exe
+          asset_name: Patroni-Env-Setup.exe
+          asset_content_type: application/vnd.microsoft.portable-executable          
