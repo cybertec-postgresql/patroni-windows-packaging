@@ -3,12 +3,13 @@
   <name>Patroni HA Windows Service</name>
   <description>Patroni high-availability solution using Python and etcd</description>
   <executable>python.exe</executable>
-  <arguments>%BASE%\patroni.py %BASE%\postgres.yml</arguments>
+  <arguments>%BASE%\patroni.py %BASE%\patroni.yml</arguments>
   <stopparentprocessfirst>true</stopparentprocessfirst>
   <log mode="roll"></log>
   <logpath>%BASE%\log</logpath>
   <serviceaccount>
     <user>postgres</user>
     <password>12345</password>
+    <allowservicelogon>true</allowservicelogon>
   </serviceaccount>
 </service>
