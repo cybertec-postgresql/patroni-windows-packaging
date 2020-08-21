@@ -6,6 +6,7 @@ SET PIP=pip3.exe
 CD patroni
 %PIP% install --no-index --find-links .patroni-packages -r requirements.txt
 %PIP% install --no-index --find-links .patroni-packages psycopg2-binary
+CD ..
 @ECHO --- Patroni packages installed ---
 
 @ECHO --- You may close this terminal window ---
