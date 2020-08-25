@@ -1,3 +1,4 @@
+REM This script is for back compatibility only. Use install.ps1 instead!
 @ECHO off
 
 SET PYTHON=python.exe
