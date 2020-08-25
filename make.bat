@@ -1,5 +1,5 @@
 @ECHO off
-SET MD=patroni-win-x64
+SET MD=PES
 SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.3.22/etcd-v3.3.22-windows-amd64.zip
 SET PATRONI_REF=https://github.com/zalando/patroni/archive/v1.6.5.zip
 SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.6/micro-2.0.6-win64.zip
