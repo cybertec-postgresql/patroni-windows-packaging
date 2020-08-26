@@ -37,6 +37,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "..\doc\setup.md"; DestDir: "{app}\doc"; Flags: isreadme
 Source: "..\PES\*"; DestDir: "{app}"; Flags: ignoreversion createallsubdirs recursesubdirs
 
 [Icons]

@@ -16,6 +16,7 @@ DEL Patroni-Env-Setup.exe > nul 2>&1
 MKDIR %MD%
 COPY src\*.bat %MD%\
 COPY src\*.ps1 %MD%\
+XCOPY doc %MD%\doc\ /E
 
 @ECHO --- Update Python and PIP installation ---
 CALL install-env.bat
