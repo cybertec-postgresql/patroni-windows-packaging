@@ -14,3 +14,6 @@ Please check the [Setup Guide](doc/setup.md)
 * [Inno Setup](https://github.com/jrsoftware/issrc)
 
 `curl` and `powershell` both present in Windows 10 build 17063 and later. However, one may install them on earlier OSes and get the same result.
+
+## Authors
+[Pavlo Golub](https://github.com/pashagolub) and [Julian Markwort](https://github.com/markwort)
