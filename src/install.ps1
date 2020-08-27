@@ -1,5 +1,5 @@
 Write-Host "--- Installing Python runtime ---" -ForegroundColor blue
-.\python-install.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_launcher=0
+Start-Process -FilePath .\python-install.exe -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_launcher=0" -NoNewWindow -Wait
 python.exe -m pip install --upgrade pip
 Write-Host "--- Python runtime installed ---`n" -ForegroundColor green
 
