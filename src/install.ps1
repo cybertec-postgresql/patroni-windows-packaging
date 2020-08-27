@@ -19,7 +19,6 @@ $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
 New-LocalUser "pes" -Password $SecurePassword -Description "Patroni service account"
 $ConfFile = 'patroni\patroni_service.xml'
 (Get-Content $ConfFile) -replace '12345', $Password | Out-File -encoding ASCII $ConfFile
-Write-Host "User password: $Password"
 Write-Host "--- Patroni user added ---`n" -ForegroundColor green
 
 Write-Host "--- Installation sucessfully finished ---" -ForegroundColor green
