@@ -14,7 +14,7 @@ While the processes within `patroni` itself do not change much when running it u
 - `patroni` needs to be able to run PostgreSQL, this can only be done by unprivileged users.
 - That unprivileged user in turn needs to be able to run Patroni, thus is needs access to Python.
 - `patroni` needs to run as soon as the machine is booted up, without requiring anybody to log in and start anything.
-- For that services are used under Windows. Since `etcd`, `patroni`, and `vip-manager` are not native Windows services, it is wise to use [WinSW](https://github.com/winsw/winsw/) wrapper for that.
+- For that services are used under Windows. Since `etcd`, `patroni`, and `vip-manager` are not native Windows services, it is wise to use `[WinSW](https://github.com/winsw/winsw/)` wrapper for that.
 
 # Installing all the things
 
@@ -35,7 +35,11 @@ The PowerShell Script `install.ps1` needs to be run with special Execution Polic
 To change the Execution Policy only for the execution of the script:
 
 ```powershell
-powershell.exe -File C:\PES\install.ps1 -ExecutionPolicy Bypass
+cd C:\PES
+powershell.exe -ExecutionPolicy Bypass
+.\install.ps1
+REM waiting...
+exit
 ```
 
 During the installation, the script or the installer will try to create a new user `pes` and assign a randomly chosen password. This password will be printed on the screen, so make sure to note it down somewhere. Don't worry if you forget this password. You can check it in the `patroni\patroni_service.xml` file.
@@ -50,12 +54,26 @@ net user username password /ADD
 
 REM change the password only:
 net user username newpassword
-
-REM grant full access:
-icacls C:\PES\ /q /c /t /grant username:F
 ```
 
 Even though a new user was just created, all remaining setup tasks need to be performed as an **Administrator**, primarily to register the Services.
+
+Because PostgreSQL cannot be run by a "superuser", Patroni, and subsequently PostgreSQL is run by the `pes` user. Consequently, the user needs to be able to access the pgsql binaries, patroni configuration, patroni script and so on.
+
+```powershell
+REM grant full access to pes user:
+icacls C:\PES\ /q /c /t /grant pes:F
+```
+
+Now is also a good time to add the Firewall rules that etcd, Patroni, and PostgreSQL need to function. Make sure the program paths match up with your system, especially if you're running a different Python install location.
+
+```powershell
+netsh advfirewall firewall add rule name="etcd" dir=in action=allow program="C:\PES\etcd\etcd.exe" enable=yes
+
+netsh advfirewall firewall add rule name="postgresql" dir=in action=allow program="C:\PES\pgsql\bin\postgres.exe" enable=yes
+
+netsh advfirewall firewall add rule name="python" dir=in action=allow program="C:\Program Files\Python38\python.exe" enable=yes
+```
 
 # Setup etcd
 
@@ -126,11 +144,17 @@ You can first take a look at `C:\PES\etcd\log\etcd_service.err.log`. If somethin
 
 If there are no critical errors in those files, you can check if the etcd cluster is working allright, assuming that you've started all other etcd cluster members:
 
-```yaml
+```powershell
  C:\PES\etcd\etcdctl cluster-health
 ```
 
-TODO: put sample output here
+```powershell
+PS C:\PES\etcd> .\etcdctl cluster-health
+member 21f8508fe1bed56a is healthy: got healthy result from http://192.168.178.96:2379
+member 381962e0d76a93eb is healthy: got healthy result from http://192.168.178.97:2379
+member 49a65bc5e0e3e0ea is healthy: got healthy result from http://192.168.178.98:2379
+cluster is healthy
+```
 
 This should list all of your etcd cluster members and indicate that they are all working.
 
@@ -176,7 +200,7 @@ bootstrap:
         log_filename: postgresql.log
         wal_keep_segments: 50
       pg_hba:
-      - host replication replicator 127.0.0.1/32 md5
+      - host replication replicator 0.0.0.0/0 md5
       - host all all 0.0.0.0/0 md5
 
   initdb: 
@@ -203,7 +227,7 @@ tags:
     nosync: false
 ```
 
-:rotating_light: Under Windows one should double backslash path delimiter when used in patroni configuration, since it used as an escape character. To resolve the ambiguity we highly recommend to replace all backslashes with slashes in a folder names, e.g.
+Under Windows one should double backslash path delimiter when used in patroni configuration, since it used as an escape character. To resolve the ambiguity we highly recommend to replace all backslashes with slashes in a folder names, e.g.
 `data_dir: C:/PES/pgsql/pgcluster_data`
 
 If you're running different Patroni clusters on top of the same etcd cluster, make sure to set a different `scope` (often reffered to as cluster name) for the different Patroni clusters.
@@ -231,7 +255,7 @@ The major difference is that Patroni needs to be run as the `pes` user. For this
 Create the service:
 
 ```powershell
-C:\PES\patroni\patroni_service install
+C:\PES\patroni\patroni_service.exe install
 ```
 
 Check the service:
@@ -268,18 +292,22 @@ If there are no critical errors in those files, you can check if the Patroni clu
  C:\PES\patronictl list
 ```
 
-TODO: put sample output here
+```powershell
+PS C:\PES\patroni> python patronictl.py -c patroni.yml list
++ Cluster: pgcluster (6865748196457585920) --+----+-----------+
+| Member |      Host      |  Role  |  State  | TL | Lag in MB |
++--------+----------------+--------+---------+----+-----------+
+|  win1  | 192.168.178.96 |        | running |  2 |         0 |
+|  win2  | 192.168.178.97 |        | running |  2 |         0 |
+|  win3  | 192.168.178.98 | Leader | running |  2 |           |
++--------+----------------+--------+---------+----+-----------+
+```
 
 This should list all of your Patroni cluster members and indicate that they are all working.
 
 If you are bootstrapping the cluster for the first time and the first cluster member did not yet show up, check the logs.
 
 If there are cluster members that display "Start failed" in their status field, you need to examine the logs on those machines first.
-
-TODO
-
-- edit config file in C:\patroni-win-x64\patronictl:
-python.exe patroni\[patronictl.py](http://patronictl.py/) -c C:\PES\patroni\patroni.yml %*
 
 # Setup vip-manager
 
@@ -290,24 +318,24 @@ From the base directory `C:\PES\`, go into the `vip-manager` directory and creat
 interval: 1000
 
 # the etcd or consul key which vip-manager will regularly poll.
-trigger-key: "/service/pgcluster/leader"
+key: "/service/pgcluster/leader"
 # if the value of the above key matches the trigger-value (often the hostname of this host), vip-manager will try to add the virtual ip address to the interface specified in Iface
-trigger-value: "win1"
+nodename: "win2"
 
-ip: 192.168.88.123 # the virtual ip address to manage
-netmask: 24 # netmask for the virtual ip
-interface: "Ethernet" #interface to which the virtual ip will be added
+ip: 192.168.178.123 # the virtual ip address to manage
+mask: 24 # netmask for the virtual ip
+iface: "Ethernet 2" #interface to which the virtual ip will be added
 
-dcs-type: etcd # etcd or consul
+endpoint_type: etcd # etcd or consul
 # a list that contains all DCS endpoints to which vip-manager could talk. 
 endpoints:
-  - http://192.168.178.88:2379
-  - http://192.168.178.89:2379
-  - http://192.168.178.90:2379
+  - http://192.168.178.96:2379
+  - http://192.168.178.97:2379
+  - http://192.168.178.98:2379
 
 # how often things should be retried and how long to wait between retries. (currently only affects arpClient)
-retry-num: 2
-retry-after: 250  #in milliseconds
+retry_num: 2
+retry_after: 250  #in milliseconds
 ```
 
 Change the `trigger-key` to match what the concatenation of these values from the patroni.yml gives: `<namespace> + "/" + <scope> + "/leader"` . Patroni store the current leader name in this key.
@@ -352,7 +380,20 @@ or
 You can first take a look at `C:\PES\vip-manager\log\vip-manager_service.err.log`. If something went wrong during the installing or starting of the service already, the messages about that will be in `C:\PES\vip-manager\log\vip-manager_service.wrapper.log`.
 
 When vip-manager is working as expected, it should log messages like ...
-TODO
+
+```powershell
+2020/08/28 01:24:36 reading config from C:\PES\vip-manager\vip-manager.yml
+2020/08/28 01:24:36 IP address 192.168.178.123/24 state is false, desired false
+2020/08/28 01:24:36 IP address 192.168.178.123/24 state is false, desired true
+2020/08/28 01:24:36 Configuring address 192.168.178.123/24 on Ethernet 2
+2020/08/28 01:24:36 IP address 192.168.178.123/24 state is true, desired true
+2020/08/28 01:24:46 IP address 192.168.178.123/24 state is true, desired true
+2020/08/28 01:24:56 IP address 192.168.178.123/24 state is true, desired true
+2020/08/28 01:25:06 IP address 192.168.178.123/24 state is true, desired true
+2020/08/28 01:25:16 IP address 192.168.178.123/24 state is true, desired true
+2020/08/28 01:25:26 IP address 192.168.178.123/24 state is true, desired true
+2020/08/28 01:25:36 IP address 192.168.178.123/24 state is true, desired true
+```
 
 # Check Patroni cluster is working as expected
 
