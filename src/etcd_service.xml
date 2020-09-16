@@ -5,4 +5,5 @@
   <executable>%BASE%\etcd.exe</executable>
   <arguments>--config-file=%BASE%\etcd.conf</arguments>
   <logpath>%BASE%\log</logpath>
+  <onfailure action="restart" />
 </service>
