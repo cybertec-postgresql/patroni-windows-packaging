@@ -31,6 +31,7 @@ if exist %SEVENZIP% (
     powershell -Command "Expand-Archive '%TEMP%\etcd.zip' '%CD%'"
 )
 MOVE etcd-* %MD%\etcd
+DEL %TEMP%\etcd.zip
 @ECHO --- ETCD downloaded ---
 
 @ECHO --- Download MICRO ---
@@ -41,6 +42,7 @@ if exist %SEVENZIP% (
     powershell -Command "Expand-Archive '%TEMP%\micro.zip' '%CD%'"
 )
 MOVE micro-* %MD%\micro
+DEL %TEMP%\micro.zip
 @ECHO --- MICRO downloaded ---
 
 @ECHO --- Download VIP-MANAGER ---
@@ -51,6 +53,7 @@ if exist %SEVENZIP% (
     powershell -Command "Expand-Archive '%TEMP%\vip.zip' '%CD%'"
 )
 MOVE vip-manager* %MD%\vip-manager
+DEL %TEMP%\vip.zip
 @ECHO --- VIP-MANAGER downloaded ---
 
 @ECHO --- Download POSTGRESQL ---
@@ -62,6 +65,7 @@ if exist %SEVENZIP% (
 )
 MOVE pgsql* %MD%\pgsql
 RMDIR /Q /S "%MD%\pgsql\pgAdmin 4" "%MD%\pgsql\symbols"
+DEL %TEMP%\pgsql.zip
 @ECHO --- POSTGRESQL downloaded ---
 
 @ECHO --- Download PATRONI ---
@@ -74,6 +78,7 @@ if exist %SEVENZIP% (
 MOVE patroni-* %MD%\patroni
 DEL %MD%\patroni\postgres?.yml
 COPY src\patroni.yaml %MD%\patroni\
+DEL %TEMP%\patroni.zip
 @ECHO --- PATRONI downloaded ---
 
 @ECHO --- Download PATRONI packages ---
