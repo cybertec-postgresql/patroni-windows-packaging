@@ -5,4 +5,4 @@ SETLOCAL
 REM Set here your console [sic!] favorite editor
 SET EDITOR=micro\micro.exe
 
-python.exe patroni\patronictl.py -c patroni.yml %*
+python.exe patroni\patronictl.py -c patroni.yaml %*

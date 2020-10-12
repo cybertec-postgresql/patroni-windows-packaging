@@ -31,4 +31,16 @@ else
     Write-Host "--- Patroni user '$userName' already exists ---`n" -ForegroundColor green
 }
 
+Write-Host "--- Installing Etcd service ---" -ForegroundColor blue
+etcd\etcd_service.exe install | Out-Default
+Write-Host "--- Etcd service sucessfully installed ---" -ForegroundColor green
+
+Write-Host "--- Installing patroni service ---" -ForegroundColor blue
+patroni\patroni_service.exe install | Out-Default
+Write-Host "--- Patroni service sucessfully installed ---" -ForegroundColor green
+
+Write-Host "--- Installing vip-manager service ---" -ForegroundColor blue
+vip-manager\vip-manager_service.exe install | Out-Default
+Write-Host "--- vip-manager service sucessfully installed ---" -ForegroundColor green
+
 Write-Host "--- Installation sucessfully finished ---" -ForegroundColor green
