@@ -3,7 +3,7 @@
   <name>Patroni HA Windows Service</name>
   <description>Patroni high-availability solution using Python and etcd</description>
   <executable>python.exe</executable>
-  <arguments>%BASE%\patroni.py %BASE%\patroni.yml</arguments>
+  <arguments>%BASE%\patroni.py %BASE%\patroni.yaml</arguments>
   <stopparentprocessfirst>true</stopparentprocessfirst>
   <log mode="roll"></log>
   <logpath>%BASE%\log</logpath>

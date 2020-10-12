@@ -3,7 +3,7 @@
   <name>etcd</name>
   <description>Distributed reliable key-value store</description>
   <executable>%BASE%\etcd.exe</executable>
-  <arguments>--config-file=%BASE%\etcd.conf</arguments>
+  <arguments>--config-file=%BASE%\etcd.yaml</arguments>
   <logpath>%BASE%\log</logpath>
   <onfailure action="restart" />
 </service>
