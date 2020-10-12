@@ -4,7 +4,7 @@ SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.3.25/etcd-v3.3
 SET PATRONI_REF=https://github.com/zalando/patroni/archive/v2.0.1.zip
 SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.8/micro-2.0.8-win64.zip
 SET WINSW_REF=https://github.com/winsw/winsw/releases/download/v2.10.2/WinSW.NET461.exe
-SET VIP_REF=https://github.com/cybertec-postgresql/vip-manager/releases/download/v1.0-beta2/vip-manager_v1.0_beta2_1_amd64.zip
+SET VIP_REF=https://github.com/cybertec-postgresql/vip-manager/releases/download/v1.0-beta3/vip-manager_1.0_beta3-1_amd64.zip
 SET PGSQL_REF=https://get.enterprisedb.com/postgresql/postgresql-13.0-1-windows-x64-binaries.zip
 SET SEVENZIP="C:\Program Files\7-Zip\7z.exe"
 
