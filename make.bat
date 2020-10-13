@@ -31,6 +31,7 @@ if exist %SEVENZIP% (
     powershell -Command "Expand-Archive '%TEMP%\etcd.zip' '%CD%'"
 )
 MOVE etcd-* %MD%\etcd
+COPY src\etcd.yaml %MD%\etcd\
 DEL %TEMP%\etcd.zip
 @ECHO --- ETCD downloaded ---
 

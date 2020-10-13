@@ -1,0 +1,5 @@
+heartbeat-interval: 100
+election-timeout: 1000
+listen-peer-urls: http://0.0.0.0:2380
+listen-client-urls: http://0.0.0.0:2379
+enable-v2: true
