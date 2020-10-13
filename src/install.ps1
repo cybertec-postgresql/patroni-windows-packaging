@@ -16,7 +16,7 @@ Write-Host "--- Patroni packages installed ---`n" -ForegroundColor green
 
 $userName = "pes"
 $out = Get-LocalUser -Name $userName -ErrorAction SilentlyContinue
-if($out -eq $null)
+if($null -eq $out)
 {
     Write-Host "--- Adding local user '$userName' for patroni service ---" -ForegroundColor blue
     $Password = -join ((65..90) + (97..122) | Get-Random -Count 8 | % {[char]$_})
