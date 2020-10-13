@@ -40,7 +40,7 @@ patroni\patroni_service.exe install | Out-Default
 Write-Host "--- Patroni service sucessfully installed ---" -ForegroundColor green
 
 Write-Host "--- Installing vip-manager service ---" -ForegroundColor blue
-vip-manager\vip-manager_service.exe install | Out-Default
+vip-manager\vip_service.exe install | Out-Default
 Write-Host "--- vip-manager service sucessfully installed ---" -ForegroundColor green
 
 Write-Host "--- Installation sucessfully finished ---" -ForegroundColor green
