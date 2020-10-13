@@ -77,7 +77,7 @@ netsh advfirewall firewall add rule name="python" dir=in action=allow program="C
 
 # Setup etcd
 
-From the base directory `C:\PES\`, go into the `etcd` directory and create a file `etcd.conf`.
+From the base directory `C:\PES\`, go into the `etcd` directory and create a file `etcd.yaml`.
 
 ```yaml
 name: 'win1'
@@ -117,7 +117,7 @@ Will register the service that will later launch `etcd` automatically for us.
 Apart from the messages on screen, you can check that the service is installed with:
 
 ```powershell
-sc qc etcd
+sc.exe qc etcd
 ```
 
 You should see that the start type for this service is set to auto, which means "start the service automatically after booting up".
@@ -133,7 +133,7 @@ Having installed the service, you can start it manually:
 or
 > net start etcd
 or
-> sc start etcd
+> sc.exe start etcd
 ```
 
 You will need to go through the etcd Setup on all three hosts in order to successfully bootstrap the etcd cluster. Only after that you will be able to continue with the setup of Patroni.
@@ -168,7 +168,7 @@ Some changes to the config (mainly those involving the initial cluster members a
 
 Warning: Do not begin setting up Patroni if your etcd cluster does not yet contain all cluster members, check `C:\PES\etcd\etcdctl cluster-health` to make sure. Otherwise you will have multiple Patroni instances who are not aware of their peers and will bootstrap on their own.
 
-From the base directory `C:\PES\`, go into the `patroni` directory and create (or edit) a file `patroni.yml`.
+From the base directory `C:\PES\`, go into the `patroni` directory and create (or edit) a file `patroni.yaml`.
 
 ```yaml
 scope: pgcluster
@@ -245,7 +245,7 @@ If you intend to create a Patroni cluster from a preexisting PostgreSQL cluster,
 
 For a full list of configuration items and their description, please refer to the Patroni [Documentation](https://patroni.readthedocs.io/en/latest/SETTINGS.html).
 
-When you're done adapting the above `patroni.yml` to your needs, copy it over to the other cluster members and change the name, and IP addresses or hostnames there accordingly.
+When you're done adapting the above `patroni.yaml` to your needs, copy it over to the other cluster members and change the name, and IP addresses or hostnames there accordingly.
 
 The creation of the Patroni Service and start is similar to the procedure for `etcd`.
 The major difference is that Patroni needs to be run as the `pes` user. For this reason, the `patroni_service.xml` contains the user name and password.
@@ -261,7 +261,7 @@ C:\PES\patroni\patroni_service.exe install
 Check the service:
 
 ```powershell
-sc qc patroni
+sc.exe qc patroni
 ```
 
 You should see that the start type for this service is set to auto, which means "start the service automatically after booting up".
@@ -275,7 +275,7 @@ Start the service:
 or
 > net start etcd
 or
-> sc start etcd
+> sc.exe start etcd
 ```
 
 It is recommended to start Patroni on one host first and check that it bootstrapped as expected, before starting the remaining cluster members. This is not to avoid race conditions, because Patroni can handle those fine. This recommendation is given mainly to make it easier to troubleshoot problems as soon as they arise.
@@ -293,7 +293,7 @@ If there are no critical errors in those files, you can check if the Patroni clu
 ```
 
 ```powershell
-PS C:\PES\patroni> python patronictl.py -c patroni.yml list
+PS C:\PES\patroni> python patronictl.py -c patroni.yaml list
 + Cluster: pgcluster (6865748196457585920) --+----+-----------+
 | Member |      Host      |  Role  |  State  | TL | Lag in MB |
 +--------+----------------+--------+---------+----+-----------+
@@ -311,7 +311,7 @@ If there are cluster members that display "Start failed" in their status field, 
 
 # Setup vip-manager
 
-From the base directory `C:\PES\`, go into the `vip-manager` directory and create a file `vip-manager.yml`.
+From the base directory `C:\PES\`, go into the `vip-manager` directory and create a file `vip-manager.yaml`.
 
 ```powershell
 # time (in milliseconds) after which vip-manager wakes up and checks if it needs to register or release ip addresses.
@@ -338,9 +338,9 @@ retry_num: 2
 retry_after: 250  #in milliseconds
 ```
 
-Change the `trigger-key` to match what the concatenation of these values from the patroni.yml gives: `<namespace> + "/" + <scope> + "/leader"` . Patroni store the current leader name in this key.
+Change the `trigger-key` to match what the concatenation of these values from the patroni.yaml gives: `<namespace> + "/" + <scope> + "/leader"` . Patroni store the current leader name in this key.
 
-Change the `trigger-value` to the `name` in the `patroni.yml` of this host.
+Change the `trigger-value` to the `name` in the `patroni.yaml` of this host.
 
 Change `ip`, `netmask`, `interface` to the virtual IP that will be managed and the appropriate netmask, as well as the networking interface on which the virtual IP should be registered.
 
@@ -352,13 +352,13 @@ The creation of the vip-manager Service and start is similar to the procedure fo
 Create the service:
 
 ```powershell
-C:\PES\vip-manager\vip-manager_service install
+C:\PES\vip-manager\vip_service install
 ```
 
 Check the service:
 
 ```powershell
-sc qc vip-manager
+sc.exe qc vip-manager
 ```
 
 You should see that the start type for this service is set to auto, which means "start the service automatically after booting up".
@@ -368,7 +368,7 @@ You should see that the start type for this service is set to auto, which means 
 Start the service:
 
 ```powershell
-> vip-manager_service.exe start
+> vip_service.exe start
 or
 > net start vip-manager
 or
@@ -377,12 +377,12 @@ or
 
 ## Check vip-manager
 
-You can first take a look at `C:\PES\vip-manager\log\vip-manager_service.err.log`. If something went wrong during the installing or starting of the service already, the messages about that will be in `C:\PES\vip-manager\log\vip-manager_service.wrapper.log`.
+You can first take a look at `C:\PES\vip-manager\log\vip_service.err.log`. If something went wrong during the installing or starting of the service already, the messages about that will be in `C:\PES\vip-manager\log\vip_service.wrapper.log`.
 
 When vip-manager is working as expected, it should log messages like ...
 
 ```powershell
-2020/08/28 01:24:36 reading config from C:\PES\vip-manager\vip-manager.yml
+2020/08/28 01:24:36 reading config from C:\PES\vip-manager\vip-manager.yaml
 2020/08/28 01:24:36 IP address 192.168.178.123/24 state is false, desired false
 2020/08/28 01:24:36 IP address 192.168.178.123/24 state is false, desired true
 2020/08/28 01:24:36 Configuring address 192.168.178.123/24 on Ethernet 2
