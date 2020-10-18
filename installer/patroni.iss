@@ -37,11 +37,14 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "..\doc\setup.md"; DestDir: "{app}\doc"; Flags: isreadme
 Source: "..\PES\*"; DestDir: "{app}"; Flags: ignoreversion createallsubdirs recursesubdirs
 
 [Icons]
+Name: "{group}\PES GUI"; Filename: "{app}\pes\pes.exe"; WorkingDir: "{app}\pes"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\install.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
+Filename: "{app}\pes\pes.exe"; Description: "Launch PES GUI"; Flags: postinstall nowait skipifsilent
+
+
