@@ -2,7 +2,9 @@
 Automate installing and launching of Patroni under Windows
 
 ## Install
-Please check the [Setup Guide](doc/setup.md)
+There are two ways to set up patroni cluster:
+1. For manual one, please, check the [Setup Guide](doc/setup.md);
+2. You may use [PES](https://github.com/cybertec-postgresql/PES) Graphical User Interface (included in the package) for automated setup.
 
 ## Build
 1. Run `make.bat`
