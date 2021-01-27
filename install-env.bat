@@ -1,6 +1,6 @@
 @ECHO off
 
-SET PYTHON_REF=https://www.python.org/ftp/python/3.8.5/python-3.8.5-amd64.exe
+SET PYTHON_REF=https://www.python.org/ftp/python/3.9.1/python-3.9.1-amd64.exe
 SET PYTHON=python.exe
 SET PIP=pip3.exe
 
