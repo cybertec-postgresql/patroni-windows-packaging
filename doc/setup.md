@@ -271,11 +271,11 @@ You should see that the start type for this service is set to auto, which means 
 Start the service:
 
 ```powershell
-> etcd_service.exe start
+> patroni_service.exe start
 or
-> net start etcd
+> net start patroni
 or
-> sc.exe start etcd
+> sc.exe start patroni
 ```
 
 It is recommended to start Patroni on one host first and check that it bootstrapped as expected, before starting the remaining cluster members. This is not to avoid race conditions, because Patroni can handle those fine. This recommendation is given mainly to make it easier to troubleshoot problems as soon as they arise.
