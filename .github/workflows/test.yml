@@ -19,5 +19,4 @@ jobs:
 
     - name: Test
       run: |
-        where python
         .\install-env.bat
