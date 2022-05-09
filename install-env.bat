@@ -23,3 +23,5 @@ echo Python version is:
 
 echo PIP version is:
 %PIP% --version
+
+endlocal && set PYTHON=%PYTHON% && set PIP=%PIP%
