@@ -9,7 +9,7 @@ python-install.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include
 %PYTHON% -m pip install --upgrade pip
 
 echo Python version is:
-%PYTHON% --version
+%PYTHON% --version || python --version
 
 echo PIP version is:
-%PIP% --version
+%PIP% --version || pip --version
