@@ -3,7 +3,7 @@
 
 #define MyAppName "Patroni Environment Setup"
 #define MyAppInstallDir "PES"
-#define MyAppVersion "0.1"
+#define MyAppVersion "v220510"
 #define MyAppPublisher "CYBERTEC PostgreSQL International GmbH"
 #define MyAppURL "https://www.cybertec-postgresql.com/"
 
