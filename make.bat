@@ -5,7 +5,7 @@ SET PATRONI_REF=https://github.com/zalando/patroni/archive/refs/tags/v2.1.4.zip
 SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.10/micro-2.0.10-win64.zip
 SET WINSW_REF=https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW.NET461.exe
 SET VIP_REF=https://github.com/cybertec-postgresql/vip-manager/releases/download/v1.0.1/vip-manager_1.0.1-1_amd64.zip
-SET PGSQL_REF=https://get.enterprisedb.com/postgresql/postgresql-14.2-1-windows-x64-binaries.zip
+SET PGSQL_REF=https://get.enterprisedb.com/postgresql/postgresql-14.3-1-windows-x64-binaries.zip
 SET PES_REF=https://github.com/cybertec-postgresql/PES/releases/download/v0.1/pes.zip
 
 SET SEVENZIP="C:\Program Files\7-Zip\7z.exe"
