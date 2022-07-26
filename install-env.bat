@@ -3,6 +3,8 @@
 setlocal enableDelayedExpansion
 
 set "PYTHON_REF=https://www.python.org/ftp/python/3.10.5/python-3.10.5-amd64.exe"
+@REM one should change python version in github action workflows when changed here
+
 set PYTHON="python.exe"
 set PIP="pip3.exe"
 if "%RUNNER_TOOL_CACHE%"=="" (
