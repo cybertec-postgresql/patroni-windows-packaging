@@ -19,7 +19,7 @@ $out = Get-LocalUser -Name $userName -ErrorAction SilentlyContinue
 if($null -eq $out)
 {
     Write-Host "--- Adding local user '$userName' for patroni service ---" -ForegroundColor blue
-    $Password = -join ((65..90) + (97..122) | Get-Random -Count 8 | % {[char]$_})
+    $Password = -join (("a".."z")+("1".."9")+("A".."Z")+("!"..".") | Get-Random -Count 8)
     $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
     New-LocalUser $userName -Password $SecurePassword -Description "Patroni service account"
     $ConfFile = 'patroni\patroni_service.xml'
