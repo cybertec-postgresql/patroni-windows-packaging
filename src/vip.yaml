@@ -1,0 +1,22 @@
+# time (in milliseconds) after which vip-manager wakes up and checks if it needs to register or release ip addresses.
+interval: 1000
+
+# the etcd or consul key which vip-manager will regularly poll.
+key: "/service/pgcluster/leader"
+# if the value of the above key matches the trigger-value (often the hostname of this host), vip-manager will try to add the virtual ip address to the interface specified in Iface
+nodename: "win2"
+
+ip: 192.168.178.123 # the virtual ip address to manage
+mask: 24 # netmask for the virtual ip
+iface: "Ethernet 2" #interface to which the virtual ip will be added
+
+endpoint_type: etcd # etcd or consul
+# a list that contains all DCS endpoints to which vip-manager could talk. 
+endpoints:
+  - http://192.168.178.96:2379
+  - http://192.168.178.97:2379
+  - http://192.168.178.98:2379
+
+# how often things should be retried and how long to wait between retries. (currently only affects arpClient)
+retry_num: 2
+retry_after: 250  #in milliseconds
