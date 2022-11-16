@@ -74,6 +74,8 @@ if exist %SEVENZIP% (
 )
 TIMEOUT 5
 MOVE vip-manager* %MD%\vip-manager || EXIT /B
+DEL %MD%\vip-manager\*.yml || EXIT /B
+COPY src\vip.yaml %MD%\vip-manager\ || EXIT /B
 DEL %TEMP%\vip.zip || EXIT /B
 @ECHO --- VIP-MANAGER downloaded ---
 
@@ -145,12 +147,10 @@ CALL make-installer.bat || EXIT /B
 
 @ECHO --- Prepare archive ---
 if exist %SEVENZIP% (
-    %SEVENZIP% a "%MD%.zip" -y "%MD%" -sdel
+    %SEVENZIP% a "%MD%.zip" -y "%MD%"
 ) else (
     powershell -Command "Compress-Archive '%MD%' '%MD%.zip'"
 )
 @ECHO --- Archive compressed ---
-
-
 
 @ECHO --- PACKAGING FINISHED ---

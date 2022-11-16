@@ -1,96 +1,51 @@
-scope: batman
-#namespace: /service/
-name: postgresql0
+scope: pgcluster
+namespace: /service/
+name: win1
 
 restapi:
-  listen: 127.0.0.1:8008
-  connect_address: 127.0.0.1:8008
-#  certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
-#  keyfile: /etc/ssl/private/ssl-cert-snakeoil.key
-#  authentication:
-#    username: username
-#    password: password
-
-# ctl:
-#   insecure: false # Allow connections to SSL sites without certs
-#   certfile: /etc/ssl/certs/ssl-cert-snakeoil.pem
-#   cacert: /etc/ssl/certs/ssl-cacert-snakeoil.pem
+  listen: 0.0.0.0:8008
+  connect_address: 192.168.178.88:8008
 
 etcd:
-  host: 127.0.0.1:2379
+  hosts:
+  - 192.168.178.88:2379
+  - 192.168.178.89:2379
+  - 192.168.178.90:2379
 
 bootstrap:
-  # this section will be written into Etcd:/<namespace>/<scope>/config after initializing new cluster
-  # and all other cluster members will use it as a `global configuration`
   dcs:
     ttl: 30
     loop_wait: 10
     retry_timeout: 10
-    maximum_lag_on_failover: 1048576
-#    master_start_timeout: 300
-#    synchronous_mode: false
-    #standby_cluster:
-      #host: 127.0.0.1
-      #port: 1111
-      #primary_slot_name: patroni
+    maximum_lag_on_failover: 1048906
     postgresql:
       use_pg_rewind: true
-#      use_slots: true
+      use_slots: true
       parameters:
-#        wal_level: hot_standby
-#        hot_standby: "on"
-#        wal_keep_segments: 8
-#        max_wal_senders: 10
-#        max_replication_slots: 10
-#        wal_log_hints: "on"
-#        archive_mode: "on"
-#        archive_timeout: 1800s
-#        archive_command: mkdir -p ../wal_archive && test ! -f ../wal_archive/%f && cp %p ../wal_archive/%f
-#      recovery_conf:
-#        restore_command: cp ../wal_archive/%f %p
+        logging_collector: true
+        log_directory: log
+        log_filename: postgresql.log
+        wal_keep_segments: 50
+      pg_hba:
+      - host replication replicator 0.0.0.0/0 md5
+      - host all all 0.0.0.0/0 md5
 
-  # some desired options for 'initdb'
-  initdb:  # Note: It needs to be a list (some options need values, others are switches)
+  initdb: 
   - encoding: UTF8
   - data-checksums
 
-  pg_hba:  # Add following lines to pg_hba.conf after running 'initdb'
-  - host replication replicator 127.0.0.1/32 md5
-  - host all all 0.0.0.0/0 md5
-#  - hostssl all all 0.0.0.0/0 md5
-
-  # Additional script to be launched after initial cluster creation (will be passed the connection URL as parameter)
-# post_init: /usr/local/bin/setup_cluster.sh
-
-  # Some additional users users which needs to be created after initializing new cluster
-  users:
-    admin:
-      password: admin
-      options:
-        - createrole
-        - createdb
-
 postgresql:
-  listen: 127.0.0.1:5432
-  connect_address: 127.0.0.1:5432
-  data_dir: data/postgresql0
-#  bin_dir: C:/bigsql/pg11/bin
-#  config_dir:
-  pgpass: data/pgpass0
+  listen: 0.0.0.0:5432
+  connect_address: 192.168.178.88:5432
+  data_dir: ../pgsql/data
+  bin_dir: ../pgsql/bin
   authentication:
     replication:
       username: replicator
-      password: rep-pass
+      password: reptilefluid
     superuser:
       username: postgres
-      password: zalando
-  parameters:
-    unix_socket_directories: '.'
-
-#watchdog:
-#  mode: automatic # Allowed values: off, automatic, required
-#  device: /dev/watchdog
-#  safety_margin: 5
+      password: snakeoil
 
 tags:
     nofailover: false

@@ -1,5 +1,12 @@
+name: 'win1'
+data-dir: win1.etcd
 heartbeat-interval: 100
 election-timeout: 1000
 listen-peer-urls: http://0.0.0.0:2380
 listen-client-urls: http://0.0.0.0:2379
+initial-advertise-peer-urls: http://192.168.178.88:2380
+advertise-client-urls: http://192.168.178.88:2379
+initial-cluster: win1=http://192.168.178.88:2380,win2=http://192.168.178.89:2380,win3=http://192.168.178.90:2380
+initial-cluster-token: 'etcd-cluster'
+initial-cluster-state: 'new'
 enable-v2: true
