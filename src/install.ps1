@@ -1,3 +1,6 @@
+#Requires -Version 7.0
+#Requires -RunAsAdministrator
+
 Write-Host "--- Installing Python runtime ---" -ForegroundColor blue
 Start-Process -FilePath .\python-install.exe -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_launcher=0" -NoNewWindow -Wait
 # update pip and pipe output to stdout to avoid parallel execution
