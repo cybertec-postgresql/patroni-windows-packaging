@@ -9,4 +9,4 @@ advertise-client-urls: http://192.168.178.88:2379
 initial-cluster: win1=http://192.168.178.88:2380,win2=http://192.168.178.89:2380,win3=http://192.168.178.90:2380
 initial-cluster-token: 'etcd-cluster'
 initial-cluster-state: 'new'
-enable-v2: true
+# enable-v2: true
