@@ -4,7 +4,7 @@ SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.5.6/etcd-v3.5.
 SET PATRONI_REF=https://github.com/zalando/patroni/archive/refs/tags/v2.1.5.zip
 SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.11/micro-2.0.11-win64.zip
 SET WINSW_REF=https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW.NET461.exe
-SET VIP_REF=https://github.com/cybertec-postgresql/vip-manager/releases/download/v2.0.0-beta2/vip-manager_2.0.0-beta2_Windows_x86_64.zip
+SET VIP_REF=https://github.com/cybertec-postgresql/vip-manager/releases/download/v2.0.0/vip-manager_2.0.0_Windows_x86_64.zip
 SET PGSQL_REF=https://get.enterprisedb.com/postgresql/postgresql-15.1-1-windows-x64-binaries.zip
 SET PES_REF=https://github.com/cybertec-postgresql/PES/releases/download/v0.2/pes.zip
 
