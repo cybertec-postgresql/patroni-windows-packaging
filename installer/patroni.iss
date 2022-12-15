@@ -47,4 +47,8 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\install.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
 Filename: "{app}\pes\pes.exe"; Description: "Launch PES GUI"; Flags: postinstall nowait skipifsilent
 
+[UninstallRun]
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\uninstall.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
+
+
 
