@@ -50,4 +50,18 @@ Write-Host "--- Installing vip-manager service ---" -ForegroundColor blue
 vip-manager\vip_service.exe install | Out-Default
 Write-Host "--- vip-manager service sucessfully installed ---" -ForegroundColor green
 
+$workDir = (Get-Location).tostring()
+$python = (Get-Command python.exe).Source
+
+# grant access to PES directory
+Write-Host "--- Grant access to working directory ---" -ForegroundColor blue
+icacls $workDir /q /c /t /grant $userName:F
+Write-Host "--- Access to working directory granted ---" -ForegroundColor green
+
+Write-Host "--- Enabling Etcd, Postgres and patroni (via python) to listen to incomming traffic ---" -ForegroundColor blue
+netsh advfirewall firewall add rule name="etcd" dir=in action=allow program="$workDir\etcd\etcd.exe" enable=yes
+netsh advfirewall firewall add rule name="postgresql" dir=in action=allow program="$workDir\pgsql\bin\postgres.exe" enable=yes
+netsh advfirewall firewall add rule name="python" dir=in action=allow program="$python" enable=yes
+Write-Host "--- Firewall rules sucessfully installed ---" -ForegroundColor green
+
 Write-Host "--- Installation sucessfully finished ---" -ForegroundColor green
