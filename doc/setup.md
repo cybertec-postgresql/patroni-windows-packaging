@@ -23,7 +23,8 @@ You can choose two installation methods:
 1. by Installer (.exe)
 2. by unzipping (.zip) and running a PowerShell Script.
 
-Both installation methods need to be run with **Administrator** privileges.
+> [!IMPORTANT] 
+> Both installation methods need to be run with **Administrator** privileges. Powershell v7+ is a requirement.
 
 In either case, you will need to install everything into a path that can be made accessible to the unprivileged user that will later be used to run `patroni` and PostgreSQL.
 
