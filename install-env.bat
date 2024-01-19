@@ -2,17 +2,17 @@
 
 setlocal enableDelayedExpansion
 
-set "PYTHON_REF=https://www.python.org/ftp/python/3.11.5/python-3.11.5-amd64.exe"
+set "PYTHON_REF=https://www.python.org/ftp/python/3.12.1/python-3.12.1-amd64.exe"
 @REM one should change python version in github action workflows when changed here
 
 set PYTHON="python.exe"
 set PIP="pip3.exe"
 if "%RUNNER_TOOL_CACHE%"=="" (
     echo Running on a local maching builder
-    set PYTHON="%ProgramFiles%\Python311\python.exe"
+    set PYTHON="%ProgramFiles%\Python312\python.exe"
 )
 if "%RUNNER_TOOL_CACHE%"=="" (
-    set PIP="%ProgramFiles%\Python311\Scripts\pip3.exe"
+    set PIP="%ProgramFiles%\Python312\Scripts\pip3.exe"
 )
 
 echo Loading the Python installation...
