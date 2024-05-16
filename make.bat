@@ -1,6 +1,6 @@
 @ECHO off
 SET MD=PES
-SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.5.11/etcd-v3.5.11-windows-amd64.zip
+SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.5.13/etcd-v3.5.13-windows-amd64.zip
 SET PATRONI_REF=https://github.com/zalando/patroni/archive/refs/tags/v3.2.2.zip
 SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.13/micro-2.0.13-win64.zip
 SET WINSW_REF=https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW.NET461.exe
