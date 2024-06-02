@@ -3,12 +3,13 @@
 
 Write-Host "--- Installing Python runtime ---" -ForegroundColor blue
 Start-Process -FilePath .\python-install.exe -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_launcher=0" -NoNewWindow -Wait
-# update pip and pipe output to stdout to avoid parallel execution
-python.exe -m pip install --upgrade pip | Out-Default
-Write-Host "--- Python runtime installed ---`n" -ForegroundColor green
 
 # Update Path variable with installed Python
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
+# update pip and pipe output to stdout to avoid parallel execution
+python.exe -m pip install --upgrade pip | Out-Default
+Write-Host "--- Python runtime installed ---`n" -ForegroundColor green
 
 Write-Host "--- Installing Patroni packages ---" -ForegroundColor blue
 Set-Location 'patroni'
