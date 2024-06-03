@@ -1,5 +1,6 @@
 @ECHO off
 SET MD=PES
+SET VCREDIST_REF=https://aka.ms/vs/17/release/vc_redist.x64.exe
 SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.5.13/etcd-v3.5.13-windows-amd64.zip
 SET PATRONI_REF=https://github.com/zalando/patroni/archive/refs/tags/v3.3.0.zip
 SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.13/micro-2.0.13-win64.zip
@@ -27,6 +28,10 @@ XCOPY doc %MD%\doc\ /E || EXIT /B
 @ECHO --- End bootstrapping ---
 
 
+@ECHO --- Download VCREDIST ---
+curl %VCREDIST_REF% --location --output %MD%\vc_redist.x64.exe || EXIT /B
+@ECHO --- VCREDIST downloaded ---
+
 @ECHO --- Download ETCD ---
 curl %ETCD_REF% --location --output %TEMP%\etcd.zip || EXIT /B
 if exist %SEVENZIP% (
@@ -40,8 +45,6 @@ MOVE etcd-* %MD%\etcd || EXIT /B
 COPY src\etcd.yaml %MD%\etcd\ || EXIT /B
 DEL %TEMP%\etcd.zip || EXIT /B
 @ECHO --- ETCD downloaded ---
-
-
 
 @ECHO --- Download PES GUI ---
 curl %PES_REF% --location --output %TEMP%\pes.zip || EXIT /B
@@ -79,8 +82,6 @@ COPY src\vip.yaml %MD%\vip-manager\ || EXIT /B
 DEL %TEMP%\vip.zip || EXIT /B
 @ECHO --- VIP-MANAGER downloaded ---
 
-
-
 @ECHO --- Download POSTGRESQL ---
 curl %PGSQL_REF% --location --output %TEMP%\pgsql.zip || EXIT /B
 if exist %SEVENZIP% (
@@ -93,8 +94,6 @@ MOVE pgsql* %MD%\pgsql || EXIT /B
 RMDIR /Q /S "%MD%\pgsql\pgAdmin 4" "%MD%\pgsql\symbols" || EXIT /B
 DEL %TEMP%\pgsql.zip || EXIT /B
 @ECHO --- POSTGRESQL downloaded ---
-
-
 
 @ECHO --- Download PATRONI ---
 curl %PATRONI_REF% --location --output %TEMP%\patroni.zip || EXIT /B
@@ -110,14 +109,10 @@ COPY src\patroni.yaml %MD%\patroni\ || EXIT /B
 DEL %TEMP%\patroni.zip || EXIT /B
 @ECHO --- PATRONI downloaded ---
 
-
-
 @ECHO --- Update Python and PIP installation ---
 CALL install-env.bat || EXIT /B
 MOVE python-install.exe %MD%\ || EXIT /B
 @ECHO --- Python and PIP installation updated ---
-
-
 
 @ECHO --- Download PATRONI packages ---
 CD %MD%\patroni
@@ -125,8 +120,6 @@ CD %MD%\patroni
 %PIP% download psycopg2-binary -d .patroni-packages
 CD ..\..
 @ECHO --- PATRONI packages downloaded ---
-
-
 
 @ECHO --- Download WINSW ---
 curl %WINSW_REF% --location --output %MD%\patroni\patroni_service.exe || EXIT /B
@@ -137,13 +130,9 @@ COPY %MD%\patroni\patroni_service.exe %MD%\vip-manager\vip_service.exe /B || EXI
 COPY src\vip_service.xml %MD%\vip-manager\ || EXIT /B
 @ECHO --- WINSW downloaded ---
 
-
-
 @ECHO --- Creating windows installer ---
 CALL make-installer.bat || EXIT /B
 @ECHO --- Installer generated successfully ---
-
-
 
 @ECHO --- Prepare archive ---
 if exist %SEVENZIP% (
