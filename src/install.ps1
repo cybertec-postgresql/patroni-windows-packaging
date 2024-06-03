@@ -1,6 +1,10 @@
 #Requires -Version 7.0
 #Requires -RunAsAdministrator
 
+Write-Host "--- Installing VC++ 2015-2019 redistributable ---" -ForegroundColor blue
+Start-Process -FilePath .\vc_redist.x64.exe -ArgumentList "/install /quiet /norestart" -NoNewWindow -Wait
+Write-Host "--- VC++ 2015-2019 redistributable installed ---`n" -ForegroundColor green
+
 Write-Host "--- Installing Python runtime ---" -ForegroundColor blue
 Start-Process -FilePath .\python-install.exe -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_launcher=0" -NoNewWindow -Wait
 
