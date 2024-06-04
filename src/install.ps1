@@ -30,7 +30,7 @@ if($null -eq $out)
     $Password = ("a".."z")+("A".."Z") | Get-Random -Count 4
     $Password += ("!"..".") | Get-Random -Count 2
     $Password += ("0".."9") | Get-Random -Count 2
-    $Password = -join($Password)
+    $Password = [Security.SecurityElement]::Escape(-join($Password))
 
     $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
     New-LocalUser $userName -Password $SecurePassword -Description "Patroni service account"
