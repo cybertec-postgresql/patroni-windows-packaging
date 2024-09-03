@@ -7,7 +7,6 @@ SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.13/micro-
 SET WINSW_REF=https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW.NET461.exe
 SET VIP_REF=https://github.com/cybertec-postgresql/vip-manager/releases/download/v2.6.0/vip-manager_2.6.0_Windows_x86_64.zip
 SET PGSQL_REF=https://get.enterprisedb.com/postgresql/postgresql-16.4-1-windows-x64-binaries.zip
-SET PES_REF=https://github.com/cybertec-postgresql/PES/releases/download/v0.2/pes.zip
 
 SET SEVENZIP="C:\Program Files\7-Zip\7z.exe"
 
@@ -45,16 +44,6 @@ MOVE etcd-* %MD%\etcd || EXIT /B
 COPY src\etcd.yaml %MD%\etcd\ || EXIT /B
 DEL %TEMP%\etcd.zip || EXIT /B
 @ECHO --- ETCD downloaded ---
-
-@ECHO --- Download PES GUI ---
-curl %PES_REF% --location --output %TEMP%\pes.zip || EXIT /B
-if exist %SEVENZIP% (
-    %SEVENZIP% x "%TEMP%\pes.zip" -y -o"%MD%"
-) else (
-    powershell -Command "Expand-Archive '%TEMP%\pes.zip' '%MD%'"
-)
-DEL %TEMP%\pes.zip || EXIT /B
-@ECHO --- PES GUI downloaded ---
 
 @ECHO --- Download MICRO ---
 curl %MICRO_REF% --location --output %TEMP%\micro.zip || EXIT /B
