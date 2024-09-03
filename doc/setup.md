@@ -146,15 +146,14 @@ You can first take a look at `C:\PES\etcd\log\etcd_service.err.log`. If somethin
 If there are no critical errors in those files, you can check if the etcd cluster is working allright, assuming that you've started all other etcd cluster members:
 
 ```powershell
- C:\PES\etcd\etcdctl cluster-health
+ C:\PES\etcd\etcdctl --cluster=true endpoint health
 ```
 
 ```powershell
-PS C:\PES\etcd> .\etcdctl cluster-health
-member 21f8508fe1bed56a is healthy: got healthy result from http://192.168.178.96:2379
-member 381962e0d76a93eb is healthy: got healthy result from http://192.168.178.97:2379
-member 49a65bc5e0e3e0ea is healthy: got healthy result from http://192.168.178.98:2379
-cluster is healthy
+PS C:\PES\etcd> .\etcdctl --cluster=true endpoint health
+http://192.168.178.96:2379 is healthy: successfully committed proposal: took = 3.2483ms
+http://192.168.178.97:2379 is healthy: successfully committed proposal: took = 7.4558ms
+http://192.168.178.98:2379 is healthy: successfully committed proposal: took = 8.0397ms
 ```
 
 This should list all of your etcd cluster members and indicate that they are all working.
@@ -167,7 +166,7 @@ Some changes to the config (mainly those involving the initial cluster members a
 
 # Setup Patroni
 
-Warning: Do not begin setting up Patroni if your etcd cluster does not yet contain all cluster members, check `C:\PES\etcd\etcdctl cluster-health` to make sure. Otherwise you will have multiple Patroni instances who are not aware of their peers and will bootstrap on their own.
+Warning: Do not begin setting up Patroni if your etcd cluster does not yet contain all cluster members, check `C:\PES\etcd\etcdctl --cluster=true endpoint health` to make sure. Otherwise you will have multiple Patroni instances who are not aware of their peers and will bootstrap on their own.
 
 From the base directory `C:\PES\`, go into the `patroni` directory and create (or edit) a file `patroni.yaml`.
 
