@@ -7,7 +7,7 @@ Automate installing and launching of Patroni under Windows
 
 ## Install
 Download one of the binaries from [Releases](https://github.com/cybertec-postgresql/patroni-windows-packaging/releases) page.
-Please, check the [Setup Guide](doc/setup.md).
+To install from zip, please, check the [Setup Guide](doc/setup.md).
 
 ## Authors
 [Pavlo Golub](https://github.com/pashagolub) and [Julian Markwort](https://github.com/markwort)
