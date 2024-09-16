@@ -40,12 +40,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "..\PES\*"; DestDir: "{app}"; Flags: ignoreversion createallsubdirs recursesubdirs
 
 [Icons]
-Name: "{group}\PES GUI"; Filename: "{app}\pes\pes.exe"; WorkingDir: "{app}\pes"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\install.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
-Filename: "{app}\pes\pes.exe"; Description: "Launch PES GUI"; Flags: postinstall nowait skipifsilent
 
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\uninstall.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
