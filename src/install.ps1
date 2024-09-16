@@ -12,11 +12,14 @@ Start-Process -FilePath .\python-install.exe -ArgumentList "/quiet InstallAllUse
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
 # update pip and pipe output to stdout to avoid parallel execution
-python.exe -m pip install --upgrade pip | Out-Default
+Set-Location 'patroni'
+python.exe -m pip install --upgrade --no-index --find-links .patroni-packages pip | Out-Default
+pip3.exe install --no-index --find-links .patroni-packages pip_install
+pip3.exe install --no-index --find-links .patroni-packages setuptools
+pip3.exe install --no-index --find-links .patroni-packages wheel
 Write-Host "--- Python runtime installed ---`n" -ForegroundColor green
 
 Write-Host "--- Installing Patroni packages ---" -ForegroundColor blue
-Set-Location 'patroni'
 pip3.exe install --no-index --find-links .patroni-packages -r requirements.txt
 pip3.exe install --no-index --find-links .patroni-packages psycopg2-binary
 Set-Location '..'
