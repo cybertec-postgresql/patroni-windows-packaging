@@ -104,10 +104,10 @@ MOVE python-install.exe %MD%\ || EXIT /B
 @ECHO --- Python and PIP installation updated ---
 
 @ECHO --- Download PATRONI packages ---
-CD %MD%\patroni
-%PIP% download -r requirements.txt -d .patroni-packages
-%PIP% download psycopg2-binary -d .patroni-packages
-CD ..\..
+CD %MD%\patroni || EXIT /B
+%PIP% download -r requirements.txt -d .patroni-packages || EXIT /B
+%PIP% download pip pip_install setuptools wheel cdiff psycopg2-binary -d .patroni-packages || EXIT /B
+CD ..\.. || EXIT /B
 @ECHO --- PATRONI packages downloaded ---
 
 @ECHO --- Download WINSW ---
