@@ -2,7 +2,7 @@
 SET MD=PES
 SET VCREDIST_REF=https://aka.ms/vs/17/release/vc_redist.x64.exe
 SET ETCD_REF=https://github.com/etcd-io/etcd/releases/download/v3.5.16/etcd-v3.5.16-windows-amd64.zip
-SET PATRONI_REF=https://github.com/patroni/patroni/archive/refs/tags/v4.0.1.zip
+SET PATRONI_REF=https://github.com/patroni/patroni/archive/refs/tags/v4.0.2.zip
 SET MICRO_REF=https://github.com/zyedidia/micro/releases/download/v2.0.14/micro-2.0.14-win64.zip
 SET WINSW_REF=https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW.NET461.exe
 SET VIP_REF=https://github.com/cybertec-postgresql/vip-manager/releases/download/v2.6.0/vip-manager_2.6.0_Windows_x86_64.zip
