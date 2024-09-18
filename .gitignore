@@ -1,5 +1,3 @@
-/pgsql*
-/etcd*
-/pes*
+pes
 *.zip
 *.exe
