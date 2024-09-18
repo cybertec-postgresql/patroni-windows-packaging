@@ -7,7 +7,7 @@ jobs:
 
   test-windows:
     if: true # false to skip job during debug
-    name: Test Python set up
+    name: Build assets
     runs-on: windows-latest
     steps:
     - uses: actions/setup-python@v5

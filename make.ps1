@@ -32,8 +32,7 @@ function Compress-ToZipFile {
 
 function Start-Bootstrapping {
     Write-Host "`n--- Start bootstrapping ---" -ForegroundColor blue
-    Remove-Item -Recurse -Force "$MD", "patroni" -ErrorAction SilentlyContinue
-    Remove-Item -Force "$MD.zip", "$env:TEMP\etcd.zip", "$env:TEMP\pes.zip", "$env:TEMP\micro.zip", "$env:TEMP\vip.zip", "$env:TEMP\pgsql.zip", "$env:TEMP\patroni.zip", "Patroni-Env-Setup.exe" -ErrorAction SilentlyContinue
+    & ./clean.ps1
     New-Item -ItemType Directory -Path $MD
     Copy-Item "src\*.bat" $MD
     Copy-Item "src\*.ps1" $MD
