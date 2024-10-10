@@ -44,7 +44,8 @@ if($null -eq $out)
 }
 else
 {
-    Write-Host "--- Patroni user '$userName' already exists ---`n" -ForegroundColor green
+    Write-Host "--- WARNING: Patroni user '$userName' already exists! ---" -ForegroundColor red
+    Write-Host "--- Please, set a correct password in 'patroni\patroni_service.xml'! ---`n" -ForegroundColor red
 }
 
 Write-Host "--- Installing Etcd service ---" -ForegroundColor blue
