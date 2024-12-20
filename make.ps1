@@ -15,7 +15,7 @@ function Extract-ZipFile {
     } else {
         Expand-Archive -Path "$zipFilePath" -DestinationPath "$destinationPath"
     }
-    Remove-Item -Force "$zipFilePath"
+    Remove-Item -Force "$zipFilePath" -ErrorAction Ignore
 }
 
 function Compress-ToZipFile {
@@ -68,7 +68,7 @@ function Get-VIPManager {
     Invoke-WebRequest -Uri $VIP_REF -OutFile "$env:TEMP\vip.zip"
     Extract-ZipFile "$env:TEMP\vip.zip" "$MD"
     Rename-Item "$MD\vip-manager*" "vip-manager"
-    Remove-Item "$MD\vip-manager\*.yml" -ErrorAction SilentlyContinue
+    Remove-Item "$MD\vip-manager\*.yml" -ErrorAction SilentlyContinue -ErrorAction Ignore
     Copy-Item "src\vip.yaml" "$MD\vip-manager"
     Write-Host "`n--- VIP-MANAGER downloaded ---" -ForegroundColor green
 }
@@ -77,7 +77,7 @@ function Get-PostgreSQL {
     Write-Host "`n--- Download POSTGRESQL ---" -ForegroundColor blue
     Invoke-WebRequest -Uri $PGSQL_REF -OutFile "$env:TEMP\pgsql.zip"
     Extract-ZipFile "$env:TEMP\pgsql.zip" "$MD"
-    Remove-Item -Recurse -Force "$MD\pgsql\pgAdmin 4", "$MD\pgsql\symbols"
+    Remove-Item -Recurse -Force "$MD\pgsql\pgAdmin 4", "$MD\pgsql\symbols" -ErrorAction Ignore
     Write-Host "`n--- POSTGRESQL downloaded ---" -ForegroundColor green
 }
 
@@ -86,7 +86,7 @@ function Get-Patroni {
     Invoke-WebRequest -Uri $PATRONI_REF -OutFile "$env:TEMP\patroni.zip"
     Extract-ZipFile "$env:TEMP\patroni.zip" "$MD"
     Rename-Item "$MD\patroni-*" "patroni"
-    Remove-Item "$MD\patroni\postgres?.yml"
+    Remove-Item "$MD\patroni\postgres?.yml" -ErrorAction Ignore
     Copy-Item "src\patroni.yaml" "$MD\patroni"
     Write-Host "`n--- PATRONI downloaded ---" -ForegroundColor green
 }
