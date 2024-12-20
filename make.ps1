@@ -68,7 +68,7 @@ function Get-VIPManager {
     Invoke-WebRequest -Uri $VIP_REF -OutFile "$env:TEMP\vip.zip"
     Extract-ZipFile "$env:TEMP\vip.zip" "$MD"
     Rename-Item "$MD\vip-manager*" "vip-manager"
-    Remove-Item "$MD\vip-manager\*.yml" -ErrorAction SilentlyContinue -ErrorAction Ignore
+    Remove-Item "$MD\vip-manager\*.yml" -ErrorAction Ignore
     Copy-Item "src\vip.yaml" "$MD\vip-manager"
     Write-Host "`n--- VIP-MANAGER downloaded ---" -ForegroundColor green
 }
