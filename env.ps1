@@ -1,6 +1,6 @@
 $MD = "PES"
 $VCREDIST_REF = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
-$ETCD_REF = "https://github.com/etcd-io/etcd/releases/download/v3.5.16/etcd-v3.5.16-windows-amd64.zip"
+$ETCD_REF = "https://github.com/etcd-io/etcd/releases/download/v3.5.17/etcd-v3.5.17-windows-amd64.zip"
 $PATRONI_REF = "https://github.com/patroni/patroni/archive/refs/tags/v4.0.2.zip"
 $MICRO_REF = "https://github.com/zyedidia/micro/releases/download/v2.0.14/micro-2.0.14-win64.zip"
 $WINSW_REF = "https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW.NET461.exe"
