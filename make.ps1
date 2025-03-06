@@ -119,15 +119,6 @@ function Get-WinSW {
 }
 
 function Export-Assets {
-    Write-Host "`n--- Creating windows installer ---" -ForegroundColor blue
-    if (-Not (Test-Path $INNOTOOL)) {
-        Write-Host "$INNOTOOL does not exist" -ForegroundColor Red
-        Write-Host "Please install Innotool and set the INNOTOOL environment variable." -ForegroundColor Red
-        exit 1
-    }
-    & $ISCC $ISSFile
-    Write-Host "`n--- Installer generated successfully ---" -ForegroundColor green
-
     Write-Host "`n--- Prepare archive ---" -ForegroundColor blue
     Compress-ToZipFile "$MD" "$MD.zip" 
     Write-Host "`n--- Archive compressed ---" -ForegroundColor green
