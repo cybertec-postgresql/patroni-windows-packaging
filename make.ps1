@@ -102,7 +102,7 @@ function Get-PatroniPackages {
     Write-Host "`n--- Download PATRONI packages ---" -ForegroundColor blue
     Set-Location "$MD\patroni"
     & $PIP download -r requirements.txt -d .patroni-packages
-    & $PIP download pip pip_install setuptools wheel cdiff psycopg-binary -d .patroni-packages
+    & $PIP download pip pip_install setuptools wheel cdiff psycopg -d .patroni-packages
     Set-Location -Path "..\.."
     Write-Host "`n--- PATRONI packages downloaded ---" -ForegroundColor green
 }
