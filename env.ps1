@@ -11,6 +11,3 @@ $PYTHON_REF = "https://www.python.org/ftp/python/3.13.2/python-3.13.2-amd64.exe"
 
 $SEVENZIP = "C:\Program Files\7-Zip\7z.exe"
 
-$INNOTOOL = "C:\Program Files (x86)\Inno Setup 6"
-$ISCC = Join-Path $INNOTOOL "iscc.exe"
-$ISSFile = "installer\patroni.iss"
