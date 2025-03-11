@@ -28,3 +28,4 @@ jobs:
           files: |
             *.zip
             *.tar.gz
+            Patroni-Env-Setup.exe
