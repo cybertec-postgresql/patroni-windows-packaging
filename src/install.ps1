@@ -21,7 +21,7 @@ Write-Host "--- Python runtime installed ---`n" -ForegroundColor green
 
 Write-Host "--- Installing Patroni packages ---" -ForegroundColor blue
 pip3.exe install --no-index --find-links .patroni-packages -r requirements.txt
-pip3.exe install --no-index --find-links .patroni-packages psycopg
+pip3.exe install --no-index --find-links .patroni-packages psycopg psycopg-binary
 pip3.exe install --no-index --find-links .patroni-packages cdiff
 Set-Location '..'
 Write-Host "--- Patroni packages installed ---`n" -ForegroundColor green
