@@ -11,7 +11,7 @@ $PYTHON_REF = "https://www.python.org/ftp/python/3.13.5/python-3.13.5-amd64.exe"
 
 $SEVENZIP = "C:\Program Files\7-Zip\7z.exe"
 
-function Extract-ZipFile {
+function Expand-ZipFile {
     param (
         [string]$zipFilePath,
         [string]$destinationPath
@@ -58,7 +58,7 @@ function Get-VCRedist {
 function Get-ETCD {
     Write-Host "`n--- Download ETCD ---" -ForegroundColor blue
     Invoke-WebRequest -Uri $ETCD_REF -OutFile "$env:TEMP\etcd.zip"
-    Extract-ZipFile "$env:TEMP\etcd.zip" "$MD"
+    Expand-ZipFile "$env:TEMP\etcd.zip" "$MD"
     Rename-Item "$MD\etcd-*" "etcd"
     Copy-Item "src\etcd.yaml" "$MD\etcd"
     Write-Host "`n--- ETCD downloaded ---" -ForegroundColor green
@@ -67,7 +67,7 @@ function Get-ETCD {
 function Get-Micro {
     Write-Host "`n--- Download MICRO ---" -ForegroundColor blue
     Invoke-WebRequest -Uri $MICRO_REF -OutFile "$env:TEMP\micro.zip"
-    Extract-ZipFile "$env:TEMP\micro.zip" "$MD"
+    Expand-ZipFile "$env:TEMP\micro.zip" "$MD"
     Rename-Item "$MD\micro-*" "micro"
     Write-Host "`n--- MICRO downloaded ---" -ForegroundColor green
 }
@@ -75,7 +75,7 @@ function Get-Micro {
 function Get-VIPManager {
     Write-Host "`n--- Download VIP-MANAGER ---" -ForegroundColor blue
     Invoke-WebRequest -Uri $VIP_REF -OutFile "$env:TEMP\vip.zip"
-    Extract-ZipFile "$env:TEMP\vip.zip" "$MD"
+    Expand-ZipFile "$env:TEMP\vip.zip" "$MD"
     Rename-Item "$MD\vip-manager*" "vip-manager"
     Remove-Item "$MD\vip-manager\*.yml" -ErrorAction Ignore
     Copy-Item "src\vip.yaml" "$MD\vip-manager"
@@ -84,12 +84,12 @@ function Get-VIPManager {
 
 function Get-PostgreSQL {
     Write-Host "`n--- Download POSTGRESQL ---" -ForegroundColor blue
-    # Example: prompt for credentials if not already set
-    if (-not $PGSQL_CREDENTIAL) {
-        $global:PGSQL_CREDENTIAL = Get-Credential -Message "Enter credentials for PostgreSQL download"
-    }
+    # Use prompt for credentials if auth is required
+    # if (-not $PGSQL_CREDENTIAL) {
+    #     $global:PGSQL_CREDENTIAL = Get-Credential -Message "Enter credentials for PostgreSQL download"
+    # }
     Invoke-WebRequest -Uri $PGSQL_REF -OutFile "$env:TEMP\pgsql.zip" -Credential $PGSQL_CREDENTIAL
-    Extract-ZipFile "$env:TEMP\pgsql.zip" "$MD"
+    Expand-ZipFile "$env:TEMP\pgsql.zip" "$MD"
     Remove-Item -Recurse -Force "$MD\pgsql\pgAdmin 4", "$MD\pgsql\symbols" -ErrorAction Ignore
     Write-Host "`n--- POSTGRESQL downloaded ---" -ForegroundColor green
 }
@@ -97,7 +97,7 @@ function Get-PostgreSQL {
 function Get-Patroni {
     Write-Host "`n--- Download PATRONI ---" -ForegroundColor blue
     Invoke-WebRequest -Uri $PATRONI_REF -OutFile "$env:TEMP\patroni.zip"
-    Extract-ZipFile "$env:TEMP\patroni.zip" "$MD"
+    Expand-ZipFile "$env:TEMP\patroni.zip" "$MD"
     Rename-Item "$MD\patroni-*" "patroni"
     Remove-Item "$MD\patroni\postgres?.yml" -ErrorAction Ignore
     Copy-Item "src\patroni.yaml" "$MD\patroni"
@@ -106,7 +106,30 @@ function Get-Patroni {
 
 function Update-PythonAndPIP {
     Write-Host "`n--- Update Python and PIP installation ---" -ForegroundColor blue
-    & "./install-python.ps1"
+    $PYTHON = "python.exe"
+    $PIP = "pip3.exe"
+    
+    if (-Not $env:RUNNER_TOOL_CACHE) {
+        Write-Host "Running on a local machine builder" -ForegroundColor Yellow
+        $PYTHON = "$env:ProgramFiles\Python313\python.exe"
+        $PIP = "$env:ProgramFiles\Python313\Scripts\pip3.exe"
+    }
+    
+    Write-Host "Loading the Python installation..." -ForegroundColor Blue
+    Invoke-WebRequest -Uri $PYTHON_REF -OutFile "python-install.exe"
+    Start-Process -FilePath "python-install.exe" -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_launcher=0" -Wait
+    
+    & $PYTHON -m pip install --upgrade pip
+    
+    Write-Host "Python version is:" -ForegroundColor Green
+    & $PYTHON --version
+    
+    Write-Host "PIP version is:" -ForegroundColor Green
+    & $PIP --version
+    
+    $global:PYTHON = $PYTHON
+    $global:PIP = $PIP
+    
     Move-Item "python-install.exe" "$MD"
     Write-Host "`n--- Python and PIP installation updated ---" -ForegroundColor green
 }
