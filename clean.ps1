@@ -1,5 +1,5 @@
 # Set the environment variables
-. .\env.ps1
+. .\globals.ps1
 
 Remove-Item -Recurse -Force "$MD", "patroni" -ErrorAction SilentlyContinue
 Remove-Item -Force `

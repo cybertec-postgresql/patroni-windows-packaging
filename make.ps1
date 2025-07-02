@@ -1,8 +1,8 @@
 # Stop execution on any error
 $ErrorActionPreference = "Stop"
 
-# Set the environment variables
-. .\env.ps1
+# Set the environment variables and load the functions
+. .\globals.ps1
 
 Start-Bootstrapping
 Get-VCRedist
