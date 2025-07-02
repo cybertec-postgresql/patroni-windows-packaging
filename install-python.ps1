@@ -6,8 +6,8 @@ $PIP = "pip3.exe"
 
 if (-Not $env:RUNNER_TOOL_CACHE) {
     Write-Host "Running on a local machine builder" -ForegroundColor Yellow
-    $PYTHON = "$env:ProgramFiles\Python312\python.exe"
-    $PIP = "$env:ProgramFiles\Python312\Scripts\pip3.exe"
+    $PYTHON = "$env:ProgramFiles\Python313\python.exe"
+    $PIP = "$env:ProgramFiles\Python313\Scripts\pip3.exe"
 }
 
 Write-Host "Loading the Python installation..." -ForegroundColor Blue
