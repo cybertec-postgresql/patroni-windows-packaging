@@ -32,7 +32,7 @@ if($null -eq $out)
 {
     Write-Host "--- Adding local user '$userName' for patroni service ---" -ForegroundColor blue
     $Password = ("a".."z")+("A".."Z") | Get-Random -Count 4
-    $Password += ("!"..".") | Get-Random -Count 2
+    $Password += "!","#","$","%","(",")","*","+",",","-","." | Get-Random -Count 2
     $Password += ("0".."9") | Get-Random -Count 2
     $Password = [Security.SecurityElement]::Escape(-join($Password))
 
