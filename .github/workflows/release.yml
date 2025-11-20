@@ -15,7 +15,7 @@ jobs:
           python-version: '3.13.5'
 
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Build project
         shell: pwsh
