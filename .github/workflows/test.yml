@@ -15,7 +15,7 @@ jobs:
         python-version: '3.14.4'
 
     - name: Check out code
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
 
     - name: Test
       shell: pwsh
