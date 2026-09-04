@@ -128,32 +128,72 @@ function Get-Patroni {
     Write-Host "`n--- PATRONI downloaded ---" -ForegroundColor green
 }
 
+function Get-PythonVersion {
+    # $PYTHON_REF looks like https://www.python.org/ftp/python/3.14.4/python-3.14.4-amd64.exe
+    if ($PYTHON_REF -notmatch '/python/(\d+)\.(\d+)\.(\d+)/') {
+        throw "Cannot determine the Python version from `$PYTHON_REF: $PYTHON_REF"
+    }
+    [PSCustomObject]@{
+        Full       = "$($Matches[1]).$($Matches[2]).$($Matches[3])"
+        MajorMinor = "$($Matches[1]).$($Matches[2])"
+        # All-users installs land in %ProgramFiles%\Python<major><minor>
+        DirSuffix  = "$($Matches[1])$($Matches[2])"
+    }
+}
+
 function Update-PythonAndPIP {
     Write-Host "`n--- Update Python and PIP installation ---" -ForegroundColor blue
+
+    # Derive every version-dependent path from $PYTHON_REF so that bumping the
+    # version in one place cannot leave a stale hard-coded directory behind.
+    $Version = Get-PythonVersion
     $PYTHON = "python.exe"
     $PIP = "pip3.exe"
-    
+
     if (-Not $env:RUNNER_TOOL_CACHE) {
         Write-Host "Running on a local machine builder" -ForegroundColor Yellow
-        $PYTHON = "$env:ProgramFiles\Python313\python.exe"
-        $PIP = "$env:ProgramFiles\Python313\Scripts\pip3.exe"
+        $InstallDir = Join-Path $env:ProgramFiles "Python$($Version.DirSuffix)"
+        $PYTHON = Join-Path $InstallDir "python.exe"
+        $PIP = Join-Path $InstallDir "Scripts\pip3.exe"
     }
-    
-    Write-Host "Loading the Python installation..." -ForegroundColor Blue
+
+    Write-Host "Loading the Python $($Version.Full) installation..." -ForegroundColor Blue
     Invoke-WebRequest -Uri $PYTHON_REF -OutFile "python-install.exe"
     Start-Process -FilePath "python-install.exe" -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1 Include_test=0 Include_launcher=0" -Wait
-    
+
+    foreach ($exe in $PYTHON, $PIP) {
+        if (-Not (Get-Command $exe -ErrorAction SilentlyContinue)) {
+            throw "Expected '$exe' after installing Python $($Version.Full), but it was not found."
+        }
+    }
+
     & $PYTHON -m pip install --upgrade pip
-    
+
     Write-Host "Python version is:" -ForegroundColor Green
-    & $PYTHON --version
-    
+    # 2>&1 because some Python builds report --version on stderr.
+    $Reported = ((& $PYTHON --version 2>&1) | Out-String).Trim() -replace '^Python\s+', ''
+    Write-Host $Reported
+
+    # The interpreter that downloads the wheels must match the interpreter that
+    # is shipped in the archive, otherwise the offline install gets wheels built
+    # for the wrong ABI tag. On CI this is setup-python, configured separately.
+    if ([string]::IsNullOrWhiteSpace($Reported)) {
+        throw "Could not determine the version of '$PYTHON': '--version' produced no output."
+    }
+    if ($Reported -notlike "$($Version.MajorMinor).*") {
+        throw ("Python $Reported is in use but `$PYTHON_REF pins $($Version.Full). " +
+               "Update the python-version in .github/workflows/*.yml to match globals.ps1.")
+    }
+    if ($Reported -ne $Version.Full) {
+        Write-Host "WARNING: running Python $Reported while `$PYTHON_REF pins $($Version.Full)" -ForegroundColor Yellow
+    }
+
     Write-Host "PIP version is:" -ForegroundColor Green
     & $PIP --version
-    
+
     $global:PYTHON = $PYTHON
     $global:PIP = $PIP
-    
+
     Move-Item "python-install.exe" "$MD"
     Write-Host "`n--- Python and PIP installation updated ---" -ForegroundColor green
 }
