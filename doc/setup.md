@@ -37,11 +37,14 @@ To change the Execution Policy only for the execution of the script:
 
 ```powershell
 cd C:\PES
-powershell.exe -ExecutionPolicy Bypass
-.\install.ps1
-REM waiting...
-exit
+pwsh.exe -ExecutionPolicy Bypass -File .\install.ps1
 ```
+
+> [!NOTE]
+> Use `pwsh.exe` (PowerShell 7), not `powershell.exe` (Windows PowerShell 5.1).
+> Both scripts declare `#Requires -Version 7.0`, so Windows PowerShell refuses
+> to run them. Install PowerShell 7 from <https://aka.ms/powershell> if
+> `pwsh.exe` is not available.
 
 During the installation, the script or the installer will try to create a new user `pes` and assign a randomly chosen password. This password will be printed on the screen, so make sure to note it down somewhere. Don't worry if you forget this password. You can check it in the `patroni\patroni_service.xml` file.
 
