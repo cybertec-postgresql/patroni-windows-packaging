@@ -11,18 +11,30 @@ $PYTHON_REF = "https://www.python.org/ftp/python/3.14.4/python-3.14.4-amd64.exe"
 
 $SEVENZIP = "C:\Program Files\7-Zip\7z.exe"
 
+function Invoke-SevenZip {
+    param ([Parameter(ValueFromRemainingArguments = $true)][string[]]$Arguments)
+    & $SEVENZIP @Arguments
+    # $ErrorActionPreference = "Stop" does NOT turn a non-zero native exit code into
+    # a terminating error unless $PSNativeCommandUseErrorActionPreference is enabled,
+    # and that is off by default. Without this check a failed extraction just carries
+    # on, the source archive is deleted, and a truncated package gets shipped.
+    if ($LASTEXITCODE -ne 0) {
+        throw "7-Zip failed with exit code ${LASTEXITCODE}: $SEVENZIP $($Arguments -join ' ')"
+    }
+}
+
 function Expand-ZipFile {
     param (
         [string]$zipFilePath,
         [string]$destinationPath
     )
     if (Test-Path $SEVENZIP) {
-        & $SEVENZIP x "$zipFilePath" -o"$destinationPath"
-        Start-Sleep -Seconds 5
+        Invoke-SevenZip x "$zipFilePath" "-o$destinationPath"
     }
     else {
         Expand-Archive -Path "$zipFilePath" -DestinationPath "$destinationPath"
     }
+    # Reached only when the extraction above succeeded.
     Remove-Item -Force "$zipFilePath" -ErrorAction Ignore
 }
 
@@ -32,10 +44,22 @@ function Compress-ToZipFile {
         [string]$destinationPath
     )
     if (Test-Path $SEVENZIP) {
-        & $SEVENZIP a "$destinationPath" -y "$sourcePath"
+        Invoke-SevenZip a "$destinationPath" -y "$sourcePath"
     }
     else {
         Compress-Archive -Path "$sourcePath" -DestinationPath "$destinationPath"
+    }
+    # 7-Zip's "a" appends to an existing archive rather than replacing it, so a
+    # stale file from an earlier run would satisfy a bare Test-Path. make.ps1
+    # always runs clean.ps1 first, but check the result is real regardless.
+    if (-Not (Test-Path $destinationPath)) {
+        throw "Archive '$destinationPath' was not produced."
+    }
+    if ((Get-Item $destinationPath).Length -eq 0) {
+        throw "Archive '$destinationPath' is empty."
+    }
+    if (Test-Path $SEVENZIP) {
+        Invoke-SevenZip t "$destinationPath"
     }
 }
 
