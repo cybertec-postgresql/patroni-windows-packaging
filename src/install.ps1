@@ -32,14 +32,27 @@ if($null -eq $out)
 {
     Write-Host "--- Adding local user '$userName' for patroni service ---" -ForegroundColor blue
     $Password = ("a".."z")+("A".."Z") | Get-Random -Count 4
-    $Password += ("!"..".") | Get-Random -Count 2
+    $Password += "!","#","$","%","(",")","*","+",",","-","." | Get-Random -Count 2
     $Password += ("0".."9") | Get-Random -Count 2
-    $Password = [Security.SecurityElement]::Escape(-join($Password))
+    $Password = -join($Password)
 
+    # The account gets the verbatim password ...
     $SecurePassword = ConvertTo-SecureString $Password -AsPlainText -Force
     New-LocalUser $userName -Password $SecurePassword -Description "Patroni service account"
-    $ConfFile = 'patroni\patroni_service.xml'
-    (Get-Content $ConfFile) -replace '12345', $Password | Out-File -encoding ASCII $ConfFile
+
+    # ... while the XML document gets an escaped copy. Applying Escape() before
+    # New-LocalUser would store e.g. '&amp;' as the real password, which WinSW's XML
+    # parser then reads back as '&' -- the two would never match.
+    # String.Replace() is used instead of the -replace operator: -replace treats '$&',
+    # '$1' etc. in the replacement as capture-group references and would corrupt any
+    # password containing '$'.
+    $ConfFile = Join-Path $PWD 'patroni\patroni_service.xml'
+    $XmlPassword = [Security.SecurityElement]::Escape($Password)
+    $Content = (Get-Content $ConfFile -Raw).Replace('12345', $XmlPassword)
+    [System.IO.File]::WriteAllText($ConfFile, $Content, [System.Text.Encoding]::ASCII)
+
+    Write-Host "--- Password for '$userName' is: $Password ---" -ForegroundColor yellow
+    Write-Host "--- Note it down. It is also stored in 'patroni\patroni_service.xml' ---" -ForegroundColor yellow
     Write-Host "--- Patroni user '$userName' added ---`n" -ForegroundColor green
 }
 else
