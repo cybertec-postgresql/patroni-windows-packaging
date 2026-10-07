@@ -1,13 +1,15 @@
 $MD = "PES"
 
-# Every download is pinned to the SHA-256 of the exact artifact this packaging
-# was built and tested against. Get-VerifiedFile refuses to continue on a
-# mismatch. When bumping a *_REF below, recompute the matching *_SHA256 with:
+# Every binary download below is pinned to the SHA-256 of the exact artifact this
+# packaging was built and tested against. Get-VerifiedFile refuses to continue on
+# a mismatch. When bumping a *_REF below, recompute the matching *_SHA256 with:
 #
 #     (Get-FileHash <downloaded-file> -Algorithm SHA256).Hash
 #
 # and, where upstream publishes its own checksum file, cross-check against that
 # rather than trusting the copy you just downloaded.
+#
+# The wheels fetched by Get-PatroniPackages are not covered; see the note there.
 
 # aka.ms/vs/17/release always serves the current redistributable, so this one
 # cannot be pinned. It is downloaded unverified by design.
@@ -238,6 +240,10 @@ function Update-PythonAndPIP {
 
 function Get-PatroniPackages {
     Write-Host "`n--- Download PATRONI packages ---" -ForegroundColor blue
+    # These wheels ship in the archive but are not hash-pinned the way the
+    # binaries above are: pip verifies each file against the sha256 the index
+    # advertises, which is weaker than pinning it here. Pinning needs a
+    # --require-hashes lockfile, because requirements.txt specifies ranges.
     Set-Location "$MD\patroni"
     & $PIP download -r requirements.txt -d .patroni-packages
     & $PIP download pip pip_install setuptools wheel cdiff psycopg psycopg-binary -d .patroni-packages
