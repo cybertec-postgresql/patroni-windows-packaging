@@ -43,10 +43,32 @@ Source: "..\PES\*"; DestDir: "{app}"; Flags: ignoreversion createallsubdirs recu
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\install.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
+Filename: "pwsh.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\install.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
 
 [UninstallRun]
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\uninstall.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
+Filename: "pwsh.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\uninstall.ps1"""; WorkingDir: "{app}"; Flags: waituntilterminated
 
 
 
+
+[Code]
+{ install.ps1 and uninstall.ps1 both declare "#Requires -Version 7.0". Windows
+  PowerShell 5.1 (powershell.exe) refuses to run them, so the setup must launch
+  pwsh.exe and must not proceed at all when PowerShell 7 is missing. }
+function PwshPresent(): Boolean;
+var
+  ResultCode: Integer;
+begin
+  Result := Exec('pwsh.exe', '-NoProfile -Command "exit 0"', '', SW_HIDE,
+                 ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+end;
+
+function InitializeSetup(): Boolean;
+begin
+  Result := PwshPresent();
+  if not Result then
+    MsgBox('PowerShell 7 (pwsh.exe) was not found on this machine.' #13#10#13#10
+           'The Patroni Environment Setup scripts require PowerShell 7 or newer.' #13#10
+           'Install it from https://aka.ms/powershell and run this setup again.',
+           mbCriticalError, MB_OK);
+end;
