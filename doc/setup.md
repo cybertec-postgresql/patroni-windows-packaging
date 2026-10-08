@@ -309,6 +309,13 @@ PS C:\PES\patroni> python patronictl.py -c patroni.yaml list
 
 This should list all of your Patroni cluster members and indicate that they are all working.
 
+`C:\PES\patronictl.bat` also sets `EDITOR` and `PAGER`, which `patronictl edit-config` needs. If you call `python patronictl.py` directly, set them yourself first, otherwise showing the diff fails with `FileNotFoundError: [WinError 2]`:
+
+```powershell
+$env:EDITOR = "C:\PES\micro\micro.exe"
+$env:PAGER = "more.com"
+```
+
 If you are bootstrapping the cluster for the first time and the first cluster member did not yet show up, check the logs.
 
 If there are cluster members that display "Start failed" in their status field, you need to examine the logs on those machines first.
